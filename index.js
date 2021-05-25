@@ -24,12 +24,6 @@ mongooseConnection
 
 app.use("/api", apiRouter);
 
-app.get("/hello", (req, res, next) => {
-  res.json({
-    msg: "Hello World",
-  });
-});
-
 app.listen(APP_PORT, () => {
   console.log(
     `⚡️ [server]: Server is running at http://localhost:${APP_PORT}`
