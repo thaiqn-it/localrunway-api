@@ -21,6 +21,7 @@
     "sample:removeUsers": "node db/sample/removeUsers.js"
   },
   "devDependencies": {
+    "eslint": "^7.27.0",
     "nodemon": "^2.0.7"
   }
 }
