@@ -1,5 +1,5 @@
-{
-    rules: {
-        semi: ["always"]
-    }
-}
+module.exports = {
+  rules: {
+    semi: 1,
+  },
+};
