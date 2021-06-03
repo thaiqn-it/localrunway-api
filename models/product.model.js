@@ -73,6 +73,12 @@ productSchema.virtual("localbrand", {
 	justOne: true,
 });
 
+productSchema.virtual("producthashtags", {
+	ref: "ProductHashtag",
+	localField: "_id",
+	foreignField: "productId",
+});
+
 const Product = mongoose.model("Product", productSchema);
 
 module.exports = { Product };
