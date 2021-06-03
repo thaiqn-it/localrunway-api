@@ -13,6 +13,14 @@ exports.hashPassword = (raw) => {
 	return bcrypt.hashSync(raw, BCRYPT_SALT_ROUND);
 };
 
+exports.excludeFields = (obj, fields) => {
+	const copyObj = { ...obj };
+	for (let field of fields) {
+		copyObj[field] = undefined;
+	}
+	return copyObj;
+};
+
 exports.excludePassword = (obj, passwordField) => {
 	if (!passwordField) passwordField = "password";
 	obj.password = undefined;

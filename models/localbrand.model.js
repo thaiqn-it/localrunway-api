@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { LOCALBRAND_STATUS } = require("./enum");
 
 const localBrandSchema = new mongoose.Schema(
 	{
@@ -20,8 +21,12 @@ const localBrandSchema = new mongoose.Schema(
 		},
 		status: {
 			type: String,
-			enum: ["ACTIVE", "INACTIVE", "REQUEST"],
-			default: "ACTIVE",
+			enum: [
+				LOCALBRAND_STATUS.ACTIVE,
+				LOCALBRAND_STATUS.INACTIVE,
+				LOCALBRAND_STATUS.REQUEST,
+			],
+			default: LOCALBRAND_STATUS.ACTIVE,
 		},
 		username: {
 			type: String,
