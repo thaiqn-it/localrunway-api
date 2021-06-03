@@ -47,7 +47,8 @@ router.post(
 			.notEmpty()
 			.withMessage("Hashtag name should not be empty")
 			.bail()
-			.custom(validateHashtagNameContainSpaces),
+			.custom(validateHashtagNameContainSpaces)
+			.toLowerCase(),
 	],
 	async (req, res, next) => {
 		const errors = validationResult(req);
@@ -94,7 +95,8 @@ router.put(
 			.notEmpty()
 			.withMessage("Hashtag name should not be empty")
 			.bail()
-			.custom(validateHashtagNameContainSpaces),
+			.custom(validateHashtagNameContainSpaces)
+			.toLowerCase(),
 	],
 	async (req, res, next) => {
 		const errors = validationResult(req);

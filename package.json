@@ -12,7 +12,8 @@
     "http-status": "^1.5.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.10",
-    "response-time": "^2.3.2"
+    "response-time": "^2.3.2",
+    "validator": "^13.6.0"
   },
   "scripts": {
     "start": "node index.js",
