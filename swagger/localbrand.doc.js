@@ -169,7 +169,6 @@
  *          type: string
  *        required: true
  *        description: The localbrand id
- *        description: The hashtag id
  *    responses:
  *     200:
  *      description: delete succses
