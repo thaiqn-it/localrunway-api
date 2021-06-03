@@ -168,15 +168,12 @@
  *        schema:
  *          type: string
  *        required: true
-<<<<<<< HEAD
-<<<<<<< HEAD
  *        description: The localbrand id
-=======
  *        description: The hashtag id
-=======
- *        description: The localbrand id
->>>>>>> 39c5202... add product schema
  *    responses:
+ *     200:
+ *      description: delete succses
+ *      content:
  *        application/json:
  *          schema:
  *            $ref: '#/components/schemas/Localbrand'
