@@ -7,6 +7,7 @@ const { DB_URI } = require("./constants");
 const { APP_PORT } = require("./constants");
 const { apiRouter } = require("./routes");
 const { mongooseConnection } = require("./db");
+const { apiDocRouter } = require("./swagger/swagger");
 
 const app = express();
 
@@ -24,6 +25,7 @@ mongooseConnection
 	});
 
 app.use("/api", apiRouter);
+app.use("/api-doc", apiDocRouter);
 
 app.listen(APP_PORT, () => {
 	console.log(
