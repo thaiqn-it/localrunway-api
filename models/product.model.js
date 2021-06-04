@@ -83,7 +83,7 @@ productSchema.virtual("producthashtags", {
 	foreignField: "productId",
 });
 
-productSchema.index({ name: 1 });
+productSchema.index({ name: "text", color: "text" });
 
 const Product = mongoose.model("Product", productSchema);
 
