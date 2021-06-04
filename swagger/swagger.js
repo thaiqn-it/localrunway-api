@@ -11,7 +11,6 @@ const option = {
 			title: "LocalRunway api with swagger",
 			version: "0.0.1",
 			description: "This is a semester 7 project made by team NLCT",
-
 			contact: {
 				name: "Team NLCT",
 				url: "https://drive.google.com/drive/u/1/folders/1bSgk621tKv0us-xCFOMS09eLUCPNrTz6",

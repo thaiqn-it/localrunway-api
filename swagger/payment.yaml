@@ -6,24 +6,16 @@ paths:
       summary: Return list of all payments
       produces:
         - application/json
-      # parameters: # request parameters
-      #   - name: id # name of parameter passed
-      #     in: path # parameters in the path
-      #     description: path parameter takes the pet id
-      #     required: true
-      #     type: string
-      #   - in: body
-      #     name: update pet
-      #     description: It enables a user to update pet profile
-      #     required: false
-      #     schema:
-      #       $ref: "#/definitions/updatePet"
       responses:
         200:
           description: The list of all payments
-          schema:
-            type: array
-            $ref: "#/definitions/Payment"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: "#/definitions/Payment"
         401:
           description: Unauthorized users
 definitions:
