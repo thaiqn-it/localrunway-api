@@ -57,7 +57,7 @@
  * @swagger
  * tags:
  *  name: Payment
- *  description: The Payment Management Apis
+ *  description: The Localbrand Management Apis
  */
 //get
 /**
@@ -65,7 +65,7 @@
  * /api/payments:
  *  get:
  *    summary: Return list of all payments
- *    tags: [payments]
+ *    tags: [Payment]
  *    responses:
  *     200:
  *      description: The list of all payments

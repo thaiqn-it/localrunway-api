@@ -58,7 +58,6 @@
  *         enum:  [PRODUCT_TYPE.GENERAL_PRODUCT, PRODUCT_TYPE.DETAIL_PRODUCT]
  *         description: the type of the product
  */
-<<<<<<< HEAD
 //tag
 /**
  * @swagger
@@ -133,5 +132,3 @@
  *            items:
  *              $ref: '#/components/schemas/Product'
  */
-=======
->>>>>>> 39c5202... add product schema
