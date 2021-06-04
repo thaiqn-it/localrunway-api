@@ -169,9 +169,13 @@
  *          type: string
  *        required: true
 <<<<<<< HEAD
+<<<<<<< HEAD
  *        description: The localbrand id
 =======
  *        description: The hashtag id
+=======
+ *        description: The localbrand id
+>>>>>>> 39c5202... add product schema
  *    responses:
  *        application/json:
  *          schema:

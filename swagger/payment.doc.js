@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 //schema
+=======
+>>>>>>> 39c5202... add product schema
 /**
  * @swagger
  * components:
  *  schemas:
  *    Payment:
+<<<<<<< HEAD
  *      type: string
  *      required:
  *        - paymentMethod
@@ -40,4 +44,9 @@
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/Payment'
+=======
+ *      type: Object
+ *      required: true
+ *
+>>>>>>> 39c5202... add product schema
  */
