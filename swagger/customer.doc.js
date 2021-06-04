@@ -75,8 +75,10 @@
 //get
 /**
  * @swagger
- * /api/custoemers/me:
+ * /api/customers/me:
  *  get:
+ *    security:
+ *     - customerAuth: []
  *    summary: Return the customer's infomation
  *    tags: [Customer]
  *    responses:
@@ -93,7 +95,7 @@
 //post
 /**
  * @swagger
- * /api/custoemers/login:
+ * /api/customers/login:
  *   post:
  *    summary: "Login"
  *    tags: [Customer]
