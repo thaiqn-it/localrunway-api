@@ -1,13 +1,9 @@
-<<<<<<< HEAD
-=======
 //schema
->>>>>>> 7c802e9 (Adding hashtag swagger)
 /**
  * @swagger
  * components:
  *  schemas:
  *    Payment:
-<<<<<<< HEAD
  *      type: string
  *      required:
  *        - paymentMethod
@@ -96,7 +92,7 @@
  * /api/payments:
  *  get:
  *    summary: Return list of all payments
- *    tags: [payments]
+ *    tags: [Payment]
  *    responses:
  *     200:
  *      description: The list of all payments
