@@ -75,7 +75,7 @@ tags:
         content:
           application/json:
             schema:
-              type: array
+              type: 
               items:
                 $ref: "#/components/schemas/Customer"
 /api/customers/login:
@@ -93,9 +93,12 @@ tags:
                 type: string
               phoneNumber:
                 type: string
+            example:
+              phoneNumber: "0123456791"
+              password: tinhbandieuky    
     responses:
       200:
-        description: the JWT auth token
+        description: login succses and return the JWT auth token
         content:
           application/json:
             schema:
