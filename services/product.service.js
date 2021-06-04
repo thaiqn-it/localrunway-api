@@ -22,13 +22,21 @@ const getById = async (id, populateDetail = false) => {
 };
 
 const search = async ({ ...params }) => {
-	const { categoryId, sort } = params;
+	const { categoryId, sort, queryValue } = params;
 	let q = {};
 	let s = {};
 	if (categoryId) {
 		q = {
 			...q,
 			categoryId,
+		};
+	}
+	if (queryValue) {
+		q = {
+			...q,
+			$text: {
+				$search: queryValue,
+			},
 		};
 	}
 	if (sort) {

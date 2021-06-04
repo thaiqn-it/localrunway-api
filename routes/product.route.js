@@ -32,13 +32,18 @@ router.get("/:id/hashtags", async (req, res, next) => {
 });
 
 router.get("/", async (req, res, next) => {
-	const { categoryId, sort } = req.query;
+	const { categoryId, sort, queryValue } = req.query;
 	try {
-		let products = await productService.search({ categoryId, sort });
+		let products = await productService.search({
+			categoryId,
+			sort,
+			queryValue,
+		});
 		return res.json({
 			products,
 		});
 	} catch (err) {
+		console.log(err);
 		return res
 			.status(INTERNAL_SERVER_ERROR)
 			.send(restError.INTERNAL_SERVER_ERROR.default());
