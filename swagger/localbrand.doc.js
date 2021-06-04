@@ -160,7 +160,7 @@
  * @swagger
  * /api/localbrands/{id}:
  *   delete:
- *    summary: "delete hashtag by id"
+ *    summary: "delete localbrand by id"
  *    tags: [Localbrand]
  *    parameters:
  *      - in: path
@@ -168,7 +168,7 @@
  *        schema:
  *          type: string
  *        required: true
- *        description: The hashtag id
+ *        description: The localbrand id
  *    responses:
  *     200:
  *      description: delete succses
