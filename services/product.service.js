@@ -1,3 +1,4 @@
+const { PRODUCT_STATUS } = require("../models/enum");
 const { hashtagService } = require("./hashtag.service");
 const { ProductHashtag } = require("../models/producthashtag.model");
 const { excludeFields } = require("../utils");
@@ -86,7 +87,20 @@ const search = async ({ ...params }) => {
 	return products;
 };
 
+const deleteById = async (id) => {
+	return await Product.findByIdAndUpdate(
+		id,
+		{
+			status: PRODUCT_STATUS.INACTIVE,
+		},
+		{
+			new: true,
+		}
+	);
+};
+
 exports.productService = {
 	getById,
 	search,
+	deleteById,
 };

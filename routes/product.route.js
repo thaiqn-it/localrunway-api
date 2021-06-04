@@ -49,4 +49,16 @@ router.get("/", async (req, res, next) => {
 	}
 });
 
+router.delete("/:id", async (req, res, next) => {
+	const { id } = req.params;
+	try {
+		const product = await productService.deleteById(id);
+		return res.json({ product });
+	} catch (err) {
+		return res
+			.status(INTERNAL_SERVER_ERROR)
+			.json(restError.INTERNAL_SERVER_ERROR.default());
+	}
+});
+
 exports.productRouter = router;
