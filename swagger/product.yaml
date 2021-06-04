@@ -87,6 +87,164 @@ paths:
         500:
           description: Internal server error
 
+  /api/products/:id:
+    delete:
+      tags:
+        - "Product"
+      summary: "Delete a product by Id"
+      parameters:
+      - name: id
+        in: path
+        required: true
+      responses:
+        200:
+          description: delete successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/definitions/Product"
+        500:
+          description: Internal server error
+
+  /api/products:
+    post:
+      tags:
+        - "Product"
+      summary: "Create a product"
+      parameters:
+      - name: name 
+        in: body 
+        type: "string"
+        description: name of product 
+        required: true  
+      - name: color 
+        in: body 
+        type: "string"
+        description: color of product 
+        required: true  
+      - name: size 
+        in: body 
+        type: "string"
+        description: size of product   
+        required: true       
+      - name: price 
+        in: body 
+        type: "integer"
+        description: price of product 
+        required: true  
+      - name: quantity 
+        in: body 
+        type: "integer"
+        description: quantity of product
+        required: true  
+      - name: status 
+        in: body 
+        type: "string"
+        description: status of product 
+        required: true  
+      - name: type 
+        in: body 
+        type: "string"
+        description: type of product     
+        required: true     
+      - name: description 
+        in: body 
+        type: "string"
+        description: description of product 
+        required: true  
+      - name: brandId 
+        in: body 
+        type: "string"
+        description: brandId of product
+        required: true     
+      - name: categoryId 
+        in: body 
+        type: "string"
+        description: categoryId of product    
+        required: true  
+      responses:
+        200:
+          description: create successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/definitions/Product"
+        500:
+          description: Internal server error
+  /api/products/:id/:
+    put:
+      tags:
+        - "Product"
+      summary: "Modify a product"
+      parameters:
+      - name: id 
+        in: path 
+        type: "string"
+        description: id of product 
+        required: true
+      - name: name 
+        in: body 
+        type: "string"
+        description: name of product 
+        required: true
+      - name: color 
+        in: body 
+        type: "string"
+        description: color of product 
+        required: true
+      - name: size 
+        in: body 
+        type: "string"
+        description: size of product        
+        required: true
+      - name: price 
+        in: body 
+        type: "integer"
+        description: price of product 
+        required: true
+      - name: quantity 
+        in: body 
+        type: "integer"
+        description: quantity of product 
+        required: true
+      - name: status 
+        in: body 
+        type: "string"
+        description: status of product 
+        required: true
+      - name: type 
+        in: body 
+        type: "string"
+        description: type of product     
+        required: true   
+      - name: description 
+        in: body 
+        type: "string"
+        description: description of product 
+        required: true
+      - name: brandId 
+        in: body 
+        type: "string"
+        description: brandId of product  
+        required: true   
+      - name: categoryId 
+        in: body 
+        type: "string"
+        description: categoryId of product  
+        required: true   
+      responses:
+        200:
+          description: add successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/definitions/Product"
+        500:
+          description: Internal server error
+            
 definitions: # Schema definition for the request body
   Product:
     type: "object"

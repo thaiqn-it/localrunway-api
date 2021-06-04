@@ -1,6 +1,6 @@
 paths:
-  /api/payments: # path of the user from your endpoint
-    get: # endpoint request type (put request)
+  /api/payments:
+    get:
       tags:
         - Payment
       summary: Return list of all payments
