@@ -27,7 +27,6 @@ const option = {
 };
 
 const specs = swaggerJsDoc(option);
-console.log(specs);
 
 router.use("/", swaggerUi.serve, swaggerUi.setup(specs));
 
