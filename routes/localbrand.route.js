@@ -129,9 +129,10 @@ router.put(
 			.withMessage("Username must be at least 8 chars"),
 		body("password")
 			.notEmpty()
-			.withMessage("Password must be at least 8 chars")
+			.withMessage("Password must not be empty")
 			.bail()
-			.isLength({ min: 8 }),
+			.isLength({ min: 8 })
+			.withMessage("Password must be at least 8 chars"),
 		body("logoUrl").notEmpty().withMessage("Logo URL should not be empty"),
 	],
 	async (req, res, next) => {

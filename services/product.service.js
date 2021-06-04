@@ -1,3 +1,4 @@
+const { hashtagService } = require("./hashtag.service");
 const { ProductHashtag } = require("../models/producthashtag.model");
 const { excludeFields } = require("../utils");
 const { Product } = require("../models/product.model");
@@ -10,10 +11,13 @@ const getById = async (id, populateDetail = false) => {
 	let product = await Product.findOne({ _id: id })
 		.populate("category")
 		.populate("localbrand");
+	if (product === null) return Promise.reject();
+	const hashtags = await hashtagService.getAllByProductId(product.id);
 	return {
 		...product._doc,
 		category: product.category,
 		localbrand: product.localbrand,
+		hashtags,
 	};
 };
 

@@ -2,7 +2,11 @@ const bcrypt = require("bcrypt");
 const { BCRYPT_SALT_ROUND } = require("../constants");
 
 exports.mapErrorArrayExpressValidator = (errorArr) => {
-	return errorArr.map((x) => ({ [x.param]: x.msg }));
+	let errorParams = {};
+	for (let x of errorArr) {
+		errorParams[x.param] = x.msg;
+	}
+	return errorParams;
 };
 
 exports.isContainSpace = (str) => {

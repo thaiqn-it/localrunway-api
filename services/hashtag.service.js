@@ -1,4 +1,5 @@
 const { Hashtag } = require("../models/hashtag.model");
+const { ProductHashtag } = require("../models/producthashtag.model");
 
 const getAll = async () => {
 	return await Hashtag.find({});
@@ -6,6 +7,13 @@ const getAll = async () => {
 
 const getById = async (id) => {
 	return await Hashtag.findById(id);
+};
+
+const getAllByProductId = async (productId) => {
+	const productHashtags = await ProductHashtag.find({
+		productId,
+	}).populate("hashtag");
+	return productHashtags.map((x) => x.hashtag);
 };
 
 const createOne = async (data) => {
@@ -26,4 +34,5 @@ exports.hashtagService = {
 	createOne,
 	deleteById,
 	updateById,
+	getAllByProductId,
 };
