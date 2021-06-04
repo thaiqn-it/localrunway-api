@@ -52,6 +52,50 @@
  *         password: 1234
  *         logoUrl: logo-all-about-him-local-brand-viet-nam-streetwear-585x372.jpg (585×372) (localbrand.vn)
  */
+//exclude password
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    LocalbrandExcludePassword:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: string
+ *          fommat: uuid
+ *          description:  The auto generate id of Localbrand
+ *        name:
+ *          type: string
+ *          description: Name of the localbrand
+ *        address:
+ *          type: string
+ *          description: The address of localbrand
+ *        phoneNumber:
+ *          type: string
+ *          description: The Phone Number of Localbrand
+ *        description:
+ *          type: string
+ *          description: The Description of Localbrand
+ *        status:
+ *          type: string
+ *          enum : ["ACTIVE", "INACTIVE", "REQUEST"]
+ *          description: the status of Localbrand
+ *        username:
+ *          type: string
+ *          description: The login username of Localbrand
+ *        logoUrl:
+ *          type: string
+ *          description: The logoUrl of Localbrand
+ *      example:
+ *         name: 5TW
+ *         address: 68/8 Trần Quang Khải, Q3, TP. Hồ Chí Minh
+ *         phoneNumber: 0919555222
+ *         description: Lorem Ipsum is simply dummy text
+ *         username:  cuong
+ *         status: ACTIVE
+ *         logoUrl: logo-all-about-him-local-brand-viet-nam-streetwear-585x372.jpg (585×372) (localbrand.vn)
+ */
+
 //tag
 /**
  * @swagger
@@ -74,7 +118,7 @@
  *          schema:
  *            type: array
  *            items:
- *              $ref: '#/components/schemas/Localbrand'
+ *              $ref: '#/components/schemas/LocalbrandExcludePassword'
  *     404:
  *      description: Not found
  */
@@ -98,7 +142,7 @@
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Localbrand'
+ *            $ref: '#/components/schemas/LocalbrandExcludePassword'
  *     404:
  *      description: the localbrand is not found
  */
@@ -121,7 +165,7 @@
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Localbrand'
+ *            $ref: '#/components/schemas/LocalbrandExcludePassword'
  *     500:
  *      description: bad request
  */
@@ -144,7 +188,7 @@
  *       content:
  *        application/json:
  *           schema:
- *             $ref: '#/components/schemas/Localbrand'
+ *             $ref: '#/components/schemas/LocalbrandExcludePassword'
  *    responses:
  *     200:
  *      description: the updated Localbrand
@@ -175,7 +219,7 @@
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Localbrand'
+ *            $ref: '#/components/schemas/LocalbrandExcludePassword'
  *     500:
  *      description: bad request
  */
