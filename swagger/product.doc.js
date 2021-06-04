@@ -105,15 +105,15 @@
  *        description: The product's id
  *    responses:
  *     200:
- *      description: The list of all Product
+ *      description: The list of all Hashtags
  *      content:
  *        application/json:
  *          schema:
  *            type: array
  *            items:
- *              $ref: '#/components/schemas/Product'
+ *              $ref: '#/components/schemas/Hashtag'
  *     500:
- *      description: the Product is not found
+ *      description: hashtags are not found
  */
 //get
 /**
