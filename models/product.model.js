@@ -43,7 +43,6 @@ const productSchema = new mongoose.Schema(
 		},
 		parentId: {
 			type: mongoose.Schema.Types.ObjectId,
-			required: true,
 			ref: "Product",
 		},
 		size: {

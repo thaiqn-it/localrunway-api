@@ -1,8 +1,19 @@
 const express = require("express");
+const { mapErrorArrayExpressValidator } = require("../utils");
+const { validationResult } = require("express-validator");
+const { categoryService } = require("../services/category.service");
+const { localBrandService } = require("../services/localbrand.service");
+const { PRODUCT_TYPE } = require("../models/enum");
+const { PRODUCT_STATUS } = require("../models/enum");
+const { body } = require("express-validator");
 const { hashtagService } = require("../services/hashtag.service");
 const { restError } = require("../errors/rest");
 const { productService } = require("../services/product.service");
-const { INTERNAL_SERVER_ERROR, NOT_FOUND } = require("http-status");
+const {
+	INTERNAL_SERVER_ERROR,
+	NOT_FOUND,
+	BAD_REQUEST,
+} = require("http-status");
 const router = express.Router();
 
 router.get("/:id", async (req, res, next) => {
@@ -60,5 +71,84 @@ router.delete("/:id", async (req, res, next) => {
 			.json(restError.INTERNAL_SERVER_ERROR.default());
 	}
 });
+
+router.post(
+	"/",
+	[
+		body("name").notEmpty(),
+		body("color").notEmpty(),
+		body("size").notEmpty(),
+		body("price").notEmpty().isInt(),
+		body("quantity").notEmpty().isInt(),
+		body("status").notEmpty().isIn(Object.values(PRODUCT_STATUS)),
+		body("type").notEmpty().isIn(Object.values(PRODUCT_TYPE)),
+		body("description").notEmpty(),
+		body("brandId").custom(async (brandId) => {
+			return (await localBrandService.getById(brandId)) !== null;
+		}),
+		body("categoryId").custom(async (categoryId) => {
+			return (await categoryService.getById(categoryId)) !== null;
+		}),
+	],
+	async (req, res, next) => {
+		const data = req.body;
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(BAD_REQUEST).json(
+				restError.BAD_REQUEST.extra({
+					errorParams: mapErrorArrayExpressValidator(errors.array()),
+				})
+			);
+		}
+		try {
+			const product = await productService.createOne(data);
+			return res.json({ product });
+		} catch (err) {
+			return res
+				.status(INTERNAL_SERVER_ERROR)
+				.json(restError.INTERNAL_SERVER_ERROR.default());
+		}
+	}
+);
+
+router.put(
+	"/:id",
+	[
+		body("name").notEmpty(),
+		body("color").notEmpty(),
+		body("size").notEmpty(),
+		body("price").notEmpty().isInt(),
+		body("quantity").notEmpty().isInt(),
+		body("status").notEmpty().isIn(Object.values(PRODUCT_STATUS)),
+		body("type").notEmpty().isIn(Object.values(PRODUCT_TYPE)),
+		body("description").notEmpty(),
+		body("brandId").custom(async (brandId) => {
+			return (await localBrandService.getById(brandId)) !== null;
+		}),
+		body("categoryId").custom(async (categoryId) => {
+			return (await categoryService.getById(categoryId)) !== null;
+		}),
+	],
+	async (req, res, next) => {
+		const data = req.body;
+		const { id } = req.params;
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(BAD_REQUEST).json(
+				restError.BAD_REQUEST.extra({
+					errorParams: mapErrorArrayExpressValidator(errors.array()),
+				})
+			);
+		}
+		try {
+			const product = await productService.updateById(id, data);
+			return res.json({ product });
+		} catch (err) {
+			return res
+				.status(INTERNAL_SERVER_ERROR)
+				.json(restError.INTERNAL_SERVER_ERROR.default());
+		}
+	}
+);
 
 exports.productRouter = router;

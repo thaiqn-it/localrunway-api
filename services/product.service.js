@@ -99,8 +99,20 @@ const deleteById = async (id) => {
 	);
 };
 
+const createOne = async ({ _id, ...data }) => {
+	const product = new Product(data);
+	return await product.save();
+};
+
+const updateById = async (id, { _id, ...data }) => {
+	const product = await Product.findByIdAndUpdate(id, data, { new: true });
+	return product;
+};
+
 exports.productService = {
 	getById,
 	search,
 	deleteById,
+	createOne,
+	updateById,
 };
