@@ -32,12 +32,13 @@ router.get("/:id/hashtags", async (req, res, next) => {
 });
 
 router.get("/", async (req, res, next) => {
-	const { categoryId, sort, queryValue } = req.query;
+	const { categoryId, sort, queryValue, sizes } = req.query;
 	try {
 		let products = await productService.search({
 			categoryId,
 			sort,
 			queryValue,
+			sizes,
 		});
 		return res.json({
 			products,

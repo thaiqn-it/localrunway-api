@@ -22,7 +22,7 @@ const getById = async (id, populateDetail = false) => {
 };
 
 const search = async ({ ...params }) => {
-	const { categoryId, sort, queryValue } = params;
+	const { categoryId, sort, queryValue, sizes } = params;
 	let q = {};
 	let s = {};
 	if (categoryId) {
@@ -64,6 +64,14 @@ const search = async ({ ...params }) => {
 				name: -1,
 			};
 		}
+	}
+	if (Array.isArray(sizes)) {
+		q = {
+			...q,
+			size: {
+				$in: sizes,
+			},
+		};
 	}
 	const products = await Product.find(q).sort(s);
 	return products;
