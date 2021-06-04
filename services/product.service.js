@@ -22,15 +22,42 @@ const getById = async (id, populateDetail = false) => {
 };
 
 const search = async ({ ...params }) => {
-	const { categoryId } = params;
+	const { categoryId, sort } = params;
 	let q = {};
+	let s = {};
 	if (categoryId) {
 		q = {
 			...q,
 			categoryId,
 		};
 	}
-	const products = await Product.find(q);
+	if (sort) {
+		if (sort === "+price") {
+			s = {
+				...s,
+				price: 1,
+			};
+		}
+		if (sort === "-price") {
+			s = {
+				...s,
+				price: -1,
+			};
+		}
+		if (sort === "+name") {
+			s = {
+				...s,
+				name: 1,
+			};
+		}
+		if (s === "-name") {
+			s = {
+				...s,
+				name: -1,
+			};
+		}
+	}
+	const products = await Product.find(q).sort(s);
 	return products;
 };
 

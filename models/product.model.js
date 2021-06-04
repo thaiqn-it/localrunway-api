@@ -56,6 +56,10 @@ const productSchema = new mongoose.Schema(
 	},
 	{
 		timestamps: true,
+		collation: {
+			locale: "vi",
+			strength: 1,
+		},
 	}
 );
 
