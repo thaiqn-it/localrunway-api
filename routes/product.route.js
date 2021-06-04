@@ -44,7 +44,6 @@ router.get("/", async (req, res, next) => {
 			products,
 		});
 	} catch (err) {
-		console.log(err);
 		return res
 			.status(INTERNAL_SERVER_ERROR)
 			.send(restError.INTERNAL_SERVER_ERROR.default());

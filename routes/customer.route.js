@@ -2,15 +2,18 @@ const express = require("express");
 const { BAD_REQUEST } = require("http-status");
 const { restError } = require("../errors/rest");
 const jwt = require("jsonwebtoken");
+const { excludePassword } = require("../utils");
 const { comparePassword } = require("../utils");
 const { JWT_SECRET_KEY } = require("../constants");
 const { customerService } = require("../services/customer.service");
+const { customer_auth } = require("../middlewares/jwt_auth");
+
 const router = express.Router();
 
-router.get("/me", async (req, res) => {
+router.get("/me", customer_auth, async (req, res) => {
 	const customer = req.customer;
 	return res.json({
-		...customer,
+		...excludePassword(customer._doc),
 	});
 });
 
