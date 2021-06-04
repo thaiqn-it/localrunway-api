@@ -32,17 +32,16 @@ router.get("/:id/hashtags", async (req, res, next) => {
 });
 
 router.get("/", async (req, res, next) => {
-	const { categoryId, sort, queryValue, sizes } = req.query;
+	const { categoryId, sort, queryValue, sizes, page } = req.query;
 	try {
-		let products = await productService.search({
+		let data = await productService.search({
 			categoryId,
 			sort,
 			queryValue,
 			sizes,
+			page,
 		});
-		return res.json({
-			products,
-		});
+		return res.json(data);
 	} catch (err) {
 		return res
 			.status(INTERNAL_SERVER_ERROR)

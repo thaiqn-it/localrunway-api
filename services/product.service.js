@@ -22,7 +22,8 @@ const getById = async (id, populateDetail = false) => {
 };
 
 const search = async ({ ...params }) => {
-	const { categoryId, sort, queryValue, sizes } = params;
+	const PAGE_LIMIT = 5;
+	const { categoryId, sort, queryValue, sizes, page } = params;
 	let q = {};
 	let s = {};
 	if (categoryId) {
@@ -73,7 +74,15 @@ const search = async ({ ...params }) => {
 			},
 		};
 	}
-	const products = await Product.find(q).sort(s);
+	const products = await Product.paginate(q, {
+		sort: s,
+		limit: PAGE_LIMIT,
+		page: page ?? 1,
+		customLabels: {
+			docs: "products",
+			totalDocs: "totalItems",
+		},
+	});
 	return products;
 };
 

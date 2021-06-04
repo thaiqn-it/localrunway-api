@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { PRODUCT_TYPE } = require("./enum");
 const { PRODUCT_STATUS } = require("./enum");
 const { Category } = require("./category.model");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const productSchema = new mongoose.Schema(
 	{
@@ -84,6 +85,8 @@ productSchema.virtual("producthashtags", {
 });
 
 productSchema.index({ name: "text", color: "text" });
+
+productSchema.plugin(mongoosePaginate);
 
 const Product = mongoose.model("Product", productSchema);
 

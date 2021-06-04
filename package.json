@@ -12,6 +12,7 @@
     "http-status": "^1.5.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.10",
+    "mongoose-paginate-v2": "^1.3.18",
     "response-time": "^2.3.2",
     "validator": "^13.6.0"
   },
