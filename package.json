@@ -18,7 +18,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "sample:addUsers": "node db/sample/addUsers.js",
+    "sample:addUsers": "node db/sample/addCustomers.js",
     "sample:removeUsers": "node db/sample/removeUsers.js"
   },
   "devDependencies": {

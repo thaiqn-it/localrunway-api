@@ -17,6 +17,10 @@ exports.hashPassword = (raw) => {
 	return bcrypt.hashSync(raw, BCRYPT_SALT_ROUND);
 };
 
+exports.comparePassword = (raw, hashed) => {
+	return bcrypt.compareSync(raw, hashed);
+};
+
 exports.excludeFields = (obj, fields) => {
 	const copyObj = { ...obj };
 	for (let field of fields) {
