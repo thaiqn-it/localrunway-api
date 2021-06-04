@@ -1,0 +1,103 @@
+paths:
+  /api/products/{id}: # path of the user from your endpoint
+    get: # endpoint request type (put request)
+      tags:
+        - Product
+      summary: Return list of all products
+      produces:
+        - application/json
+      parameters: # request parameters
+        - name: id # name of parameter passed
+          in: path # parameters in the path
+          type: "string"
+          description: path parameter takes the product id
+          required: true
+      responses:
+        200:
+          description: get product
+          schema:
+            type: array
+            $ref: "#/definitions/Product"
+        404:
+          description: product not found
+
+  /api/products/{id}/hashtags:
+    get: # endpoint request type (put request)
+      tags:
+        - Product
+      summary: get hashtags by productId
+      produces:
+        - application/json
+      parameters: # request parameters
+        - name: id # name of parameter passed
+          in: path # parameters in the path
+          type: string
+          required: true
+          description: The product's id
+      responses:
+        200:
+          description: The list of all Hashtags
+          schema:
+            type: array
+            $ref: "#/components/schemas/Hashtag"
+        500:
+          description: hashtags are not found
+definitions: # Schema definition for the request body
+  Product:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+        description: The auto generate id of Localbrand
+      brandId:
+        type: "string"
+        format: "uuid"
+        description: The Foreign key from Localbrand
+      categoryId:
+          type: string
+          fommat: uuid
+      description: The Foreign key from Catgory
+        name:
+          type: string
+          description: Name of the product
+      description:
+          type: string
+          description: The description of product
+      status:
+          type: string
+          enum : ["ACTIVE", "INACTIVE"]
+          description: the status of Localbrand
+      price:
+          type: number
+          description: The price of product
+      color:
+          type: string
+          description: The color of the product
+      quantiy:
+          type: number
+          description: The quantity of product
+      parentId:
+          type: string
+          fommat: uuid
+          description: the parents's product id of this product refer to
+      size:
+          type: string
+          description: the size of the product
+      type:
+          type: string
+          enum:  
+          - "ACTIVE"
+          - "INACTIVE"
+          description: the type of the product
+    xml:
+      name: "Product"
+
+  Hashtag: 
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: The auto generate id of Localbrand
+    xml:
+      name: "Hashtag"
