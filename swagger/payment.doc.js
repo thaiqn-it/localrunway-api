@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-=======
 //schema
->>>>>>> 7c802e9 (Adding hashtag swagger)
 /**
  * @swagger
  * components:
  *  schemas:
  *    Payment:
-<<<<<<< HEAD
- *      type: Object
- *      required: true
- *
- */
-=======
  *      type: string
  *      required:
  *        - paymentMethod
@@ -31,7 +22,7 @@
  * @swagger
  * tags:
  *  name: Payment
- *  description: The Payment Management Apis
+ *  description: The Localbrand Management Apis
  */
 //get
 /**
@@ -39,7 +30,7 @@
  * /api/payments:
  *  get:
  *    summary: Return list of all payments
- *    tags: [payments]
+ *    tags: [Payment]
  *    responses:
  *     200:
  *      description: The list of all payments
@@ -50,4 +41,3 @@
  *            items:
  *              $ref: '#/components/schemas/Payment'
  */
->>>>>>> 7c802e9 (Adding hashtag swagger)
