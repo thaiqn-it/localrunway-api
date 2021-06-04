@@ -1,0 +1,29 @@
+components:
+  schema:
+    FashionCollection:
+      type: object
+      required:
+       - name
+      properties:
+        id:
+          type: string
+          fommat: uuid
+          description: the auto generated uid of FashionCollection
+        name:  
+          type: string
+          description: the name of ther FashionCollection
+        localBrandId:
+          type: string
+          description: the id of the localBrand own this FashionCollection
+        status:
+          type: string
+          enum: 
+          description: the status of the FashionCollection
+        createDate:
+          type: string
+          fommat: date-time
+          description: the created date of the FashionCollection
+        updatedDate:
+          type: string
+          fommat: date-time
+          description: the updated date of the FashionCollection        

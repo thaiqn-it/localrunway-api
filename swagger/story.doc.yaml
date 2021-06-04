@@ -1,0 +1,24 @@
+components:
+  schema:
+    Story:
+      type: object
+      required:
+      properties:
+        id:
+          type: string
+          fommat: uuid
+          description: the auto generated uid of Story
+        mediaUrl:
+          type: string
+          description: the mediaUrl of the Story
+        description:
+          type: string
+          description: the description of Story
+        createDate:
+          type: string
+          fommat: date-time
+          description: the create date of the story    
+        updatedDate:
+          type: string
+          fommat: date-time
+          description: the updated date of the story  
