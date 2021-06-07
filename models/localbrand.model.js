@@ -21,11 +21,7 @@ const localBrandSchema = new mongoose.Schema(
 		},
 		status: {
 			type: String,
-			enum: [
-				LOCALBRAND_STATUS.ACTIVE,
-				LOCALBRAND_STATUS.INACTIVE,
-				LOCALBRAND_STATUS.REQUEST,
-			],
+			enum: Object.values(LOCALBRAND_STATUS),
 			default: LOCALBRAND_STATUS.ACTIVE,
 		},
 		username: {

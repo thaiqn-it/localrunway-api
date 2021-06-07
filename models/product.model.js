@@ -26,7 +26,7 @@ const productSchema = new mongoose.Schema(
 		},
 		status: {
 			type: String,
-			enum: [PRODUCT_STATUS.ACTIVE, PRODUCT_STATUS.INACTIVE],
+			enum: Object.values(PRODUCT_STATUS),
 			default: PRODUCT_STATUS.ACTIVE,
 		},
 		price: {
@@ -51,7 +51,7 @@ const productSchema = new mongoose.Schema(
 		type: {
 			type: String,
 			required: true,
-			enum: [PRODUCT_TYPE.GENERAL_PRODUCT, PRODUCT_TYPE.DETAIL_PRODUCT],
+			enum: Object.values(PRODUCT_TYPE),
 		},
 	},
 	{

@@ -24,7 +24,7 @@ const customerSchema = new mongoose.Schema({
 	},
 	status: {
 		type: String,
-		enum: [CUSTOMER_STATUS.ACTIVE, CUSTOMER_STATUS.INACTIVE],
+		enum: Object.values(CUSTOMER_STATUS),
 		default: CUSTOMER_STATUS.ACTIVE,
 	},
 	hobby: {
@@ -35,7 +35,7 @@ const customerSchema = new mongoose.Schema({
 	},
 	gender: {
 		type: String,
-		enum: [CUSTOMER_GENDER.MALE, CUSTOMER_GENDER.FEMALE, CUSTOMER_GENDER.OTHER],
+		enum: Object.values(CUSTOMER_GENDER),
 		required: true,
 	},
 	height: {
