@@ -24,7 +24,7 @@ const getById = async (id, populateDetail = false) => {
 
 const search = async ({ ...params }) => {
 	const PAGE_LIMIT = 5;
-	const { categoryId, sort, queryValue, sizes, page } = params;
+	const { categoryId, sort, queryValue, sizes, page, brandIds } = params;
 	let q = {};
 	let s = {};
 	if (categoryId) {
@@ -72,6 +72,14 @@ const search = async ({ ...params }) => {
 			...q,
 			size: {
 				$in: sizes,
+			},
+		};
+	}
+	if (Array.isArray(brandIds)) {
+		q = {
+			...q,
+			brandId: {
+				$in: brandIds,
 			},
 		};
 	}

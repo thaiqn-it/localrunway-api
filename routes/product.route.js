@@ -86,7 +86,7 @@ router.delete("/:id/hashtags/:hashtagId", async (req, res, next) => {
 });
 
 router.get("/", async (req, res, next) => {
-	const { categoryId, sort, queryValue, sizes, page } = req.query;
+	const { categoryId, sort, queryValue, sizes, page, brandIds } = req.query;
 	try {
 		let data = await productService.search({
 			categoryId,
@@ -94,6 +94,7 @@ router.get("/", async (req, res, next) => {
 			queryValue,
 			sizes,
 			page,
+			brandIds,
 		});
 		return res.json(data);
 	} catch (err) {
