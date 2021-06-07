@@ -109,10 +109,25 @@ const updateById = async (id, { _id, ...data }) => {
 	return product;
 };
 
+const addProductHashtag = async ({ productId, hashtagId }) => {
+	const hashtag = await new ProductHashtag({
+		productId,
+		hashtagId,
+	}).save();
+	return hashtag;
+};
+
+const deleteProductHashtag = async ({ productId, hashtagId }) => {
+	console.log(await ProductHashtag.findOne({ productId, hashtagId }));
+	return await ProductHashtag.findOneAndRemove({ productId, hashtagId });
+};
+
 exports.productService = {
 	getById,
 	search,
 	deleteById,
 	createOne,
 	updateById,
+	addProductHashtag,
+	deleteProductHashtag,
 };

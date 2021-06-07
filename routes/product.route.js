@@ -1,4 +1,5 @@
 const express = require("express");
+const { ProductHashtag } = require("../models/producthashtag.model");
 const { mapErrorArrayExpressValidator } = require("../utils");
 const { validationResult } = require("express-validator");
 const { categoryService } = require("../services/category.service");
@@ -34,6 +35,48 @@ router.get("/:id/hashtags", async (req, res, next) => {
 		const hashtags = await hashtagService.getAllByProductId(id);
 		return res.json({
 			hashtags,
+		});
+	} catch (err) {
+		return res
+			.status(INTERNAL_SERVER_ERROR)
+			.json(restError.INTERNAL_SERVER_ERROR.default());
+	}
+});
+
+router.post("/:id/hashtags", async (req, res, next) => {
+	const { id: productId } = req.params;
+	const { hashtagId } = req.body;
+	try {
+		let productHashtag = await hashtagService.getProductHashtag({
+			productId,
+			hashtagId,
+		});
+		if (productHashtag === null) {
+			productHashtag = await productService.addProductHashtag({
+				productId,
+				hashtagId,
+			});
+		}
+		return res.json({
+			productHashtag,
+		});
+	} catch (err) {
+		return res
+			.status(INTERNAL_SERVER_ERROR)
+			.json(restError.INTERNAL_SERVER_ERROR.default());
+	}
+});
+
+router.delete("/:id/hashtags/:hashtagId", async (req, res, next) => {
+	const { id: productId, hashtagId } = req.params;
+	try {
+		const productHashtag = await productService.deleteProductHashtag({
+			productId,
+			hashtagId,
+		});
+		if (productHashtag === null) throw new Error();
+		return res.json({
+			productHashtag,
 		});
 	} catch (err) {
 		return res

@@ -28,6 +28,10 @@ const updateById = async (id, data) => {
 	return await Hashtag.findByIdAndUpdate(id, data, { new: true });
 };
 
+const getProductHashtag = async ({ productId, hashtagId }) => {
+	return await ProductHashtag.findOne({ productId, hashtagId });
+};
+
 exports.hashtagService = {
 	getAll,
 	getById,
@@ -35,4 +39,5 @@ exports.hashtagService = {
 	deleteById,
 	updateById,
 	getAllByProductId,
+	getProductHashtag,
 };
