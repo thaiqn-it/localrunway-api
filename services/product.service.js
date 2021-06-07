@@ -118,7 +118,6 @@ const addProductHashtag = async ({ productId, hashtagId }) => {
 };
 
 const deleteProductHashtag = async ({ productId, hashtagId }) => {
-	console.log(await ProductHashtag.findOne({ productId, hashtagId }));
 	return await ProductHashtag.findOneAndRemove({ productId, hashtagId });
 };
 
