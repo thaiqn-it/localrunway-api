@@ -1,0 +1,159 @@
+components:
+  schemas:
+    Order:
+      type: object
+      required:
+        - brandID
+        - status
+        - paymentId
+        - customerId
+        - address
+        - phoneNumber
+        - recipientName
+      properties:
+        id:
+          type: string
+          description: The auto generate id of Category
+        brandID:
+          type: string
+          description: The brandid of the localbrand from this Order
+        status:
+          type: string
+          description: The status of this Order
+          enum: ["RECEIVED" , "SHIPPING" , "COMPLETED" , "CANCELLED"]  
+        paymentId:
+          type: string 
+          description: The paymentid of this payment
+        customerId:
+          type: string  
+          description: The customerid of the customer who order this
+        address:
+          type: string
+          description: the address of this order
+        recipientName:
+          type: string
+          description: the name of the recipient  
+        phoneNumber:
+          type: string
+          description: the phoneNumber of the customer order this
+        timestamps:
+          type: string
+          format: date-time
+          description: the date of this order is ordered
+      example:
+        id: dummy
+        brandID: dummy
+        status: SHIPPING
+        paymentId: dummy text
+        customerId: dummy
+        address: 300 Cong Hoa Street , District 3 , Ho Chi Minh City
+        recipientName: Dinh Phu Cuong
+        phoneNumber: 0123455667
+        timestamps: 02/09/2021
+  responses:
+    OrderData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The auto generate id of Category
+        localband:
+          type: object
+          properties:
+            $ref: '#/components/schemas/Localbrand'
+          description: The brandid of the localbrand from this Order
+        status:
+          type: string
+          description: The status of this Order
+          enum: ["RECEIVED" , "SHIPPING" , "COMPLETED" , "CANCELLED"]  
+        payment:
+          type: object
+          properties:
+            $ref: '#/components/schemas/Payment'
+          description: The paymentid of this payment
+        customerId:
+          type: string  
+          description: The customerid of the customer who order this
+        address:
+          type: string
+          description: the address of this order
+        recipientName:
+          type: string
+          description: the name of the recipient  
+        phoneNumber:
+          type: string
+          description: the phoneNumber of the customer order this
+        timestamps:
+          type: string
+          format: date-time
+          description: the date of this order is ordered      
+tags:
+  name: Order
+  description: The Order Management Apis
+/api/orders/:
+  post:
+    tags: [Order]
+    summary: the insert order to Db api 
+    security:
+      - customerAuth : []
+    requestBody:
+      required: true
+      description: the new order
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Order'
+    responses:
+      200:
+        description: order is add succses
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/Order'
+      500:
+        description: Bad Request or Internal Server Error
+/api/orders/{id}:
+  get:
+    tags: [Order]
+    summary: the get customer's order infomation api
+    security:
+      - customerAuth: []
+    parameters:
+      - in: path
+        name: id
+        schema: 
+          type: string
+        required: true
+        description: the order's id
+    responses:
+      200:
+        description: the customer is authorized and the order infomation is Return
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/responses/OrderData'
+      404: 
+        description: the order is not found            
+  put:  
+    tags: [Order]          
+    security:
+      - customerAuth: []
+    parameters:
+      - in: path
+        name: id
+        schema: 
+          type: string
+        required: true
+        description: the order's id
+    responses:
+      200:
+        description: the customer is authorized and the order infomation is updated 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      500: 
+        description: Internal Server Error
+      
+
+
