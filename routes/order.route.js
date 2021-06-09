@@ -41,6 +41,7 @@ router.post(
 	[
 		body("brandId")
 			.notEmpty()
+			.withMessage("Brand should not be empty")
 			.bail()
 			.custom(isBrandExist)
 			.withMessage("Brand should be existed"),
@@ -50,8 +51,9 @@ router.post(
 			.withMessage(`Status should be one of ${Object.values(ORDER_STATUS)}`),
 		body("paymentId")
 			.notEmpty()
+			.withMessage("Payment should not be empty")
 			.custom(isPaymentExist)
-			.withMessage(`Payment must be existed`),
+			.withMessage(`Payment should be existed`),
 		body("address")
 			.notEmpty()
 			.trim()
@@ -104,5 +106,59 @@ router.get("/:id", customer_auth, async (req, res, next) => {
 		return res.status(NOT_FOUND).json(restError.NOT_FOUND.default());
 	}
 });
+
+router.put(
+	"/:id",
+	customer_auth,
+	[
+		body("brandId")
+			.notEmpty()
+			.withMessage("Brand should not be empty")
+			.bail()
+			.custom(isBrandExist)
+			.withMessage("Brand should be existed"),
+		body("status")
+			.notEmpty()
+			.isIn(Object.values(ORDER_STATUS))
+			.withMessage(`Status should be one of ${Object.values(ORDER_STATUS)}`),
+		body("paymentId")
+			.notEmpty()
+			.withMessage("Payment should not be empty")
+			.custom(isPaymentExist)
+			.withMessage(`Payment should be existed`),
+		body("address")
+			.notEmpty()
+			.trim()
+			.withMessage("Address should not be empty"),
+		body("phoneNumber").notEmpty().bail().custom(validateVNPhoneNumber),
+		body("recipientName")
+			.notEmpty()
+			.trim()
+			.withMessage("Recipient Name should not be empty"),
+	],
+	async (req, res, next) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(BAD_REQUEST).json(
+				restError.BAD_REQUEST.extra({
+					errorParams: mapErrorArrayExpressValidator(errors.array()),
+				})
+			);
+		}
+		try {
+			const { id } = req.params;
+			const customerId = req.customer.id;
+			if (!customerId) throw new Error();
+			const data = { ...req.body, customerId };
+			const order = await orderService.updateOne(id, data);
+			return res.json({ order });
+		} catch (err) {
+			console.log(err);
+			res
+				.status(INTERNAL_SERVER_ERROR)
+				.json(restError.INTERNAL_SERVER_ERROR.default());
+		}
+	}
+);
 
 exports.orderRouter = router;

@@ -12,13 +12,16 @@ const getById = async (id) => {
 
 const getByIdAndCustomerId = async (id, customerId) => {
 	const order = await Order.findOne({ _id: id, customerId });
-	console.log({ id, customerId });
-	console.log(order);
 	return order._doc;
+};
+
+const updateOne = async (id, data) => {
+	return await Order.findByIdAndUpdate(id, data, { new: true });
 };
 
 exports.orderService = {
 	createOne,
 	getById,
 	getByIdAndCustomerId,
+	updateOne,
 };
