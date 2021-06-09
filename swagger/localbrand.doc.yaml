@@ -48,6 +48,7 @@ components:
          username:  cuong
          password: 1234
          logoUrl: logo-all-about-him-local-brand-viet-nam-streetwear-585x372.jpg (585×372) (localbrand.vn)
+  response:
     LocalbrandExcludePassword:
       type: object
       properties:
@@ -100,7 +101,7 @@ tags:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/LocalbrandExcludePassword'
+              $ref: '#/components/response/LocalbrandExcludePassword'
      404:
       description: Not found
   post:
@@ -118,7 +119,7 @@ tags:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/LocalbrandExcludePassword'
+            $ref: '#/components/response/LocalbrandExcludePassword'
      500:
       description: bad request
 /api/localbrands/{id}:
@@ -138,7 +139,7 @@ tags:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LocalbrandExcludePassword'
+              $ref: '#/components/response/LocalbrandExcludePassword'
       404:
         description: the localbrand is not found      
   put:
@@ -156,7 +157,7 @@ tags:
        content:
         application/json:
            schema:
-             $ref: '#/components/schemas/LocalbrandExcludePassword'
+             $ref: '#/components/response/LocalbrandExcludePassword'
     responses:
       200:
         description: the updated Localbrand
@@ -182,6 +183,6 @@ tags:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LocalbrandExcludePassword'
+              $ref: '#/components/response/LocalbrandExcludePassword'
       500:
         description: bad request      

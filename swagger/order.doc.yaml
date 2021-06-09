@@ -10,12 +10,15 @@ components:
         - address
         - phoneNumber
         - recipientName
+        - timestamps
       properties:
         id:
           type: string
-          description: The auto generate id of Category
+          format: uuid
+          description: The auto generate id of Order
         brandID:
           type: string
+          format: uuid
           description: The brandid of the localbrand from this Order
         status:
           type: string
@@ -23,9 +26,11 @@ components:
           enum: ["RECEIVED" , "SHIPPING" , "COMPLETED" , "CANCELLED"]  
         paymentId:
           type: string 
+          formatL: uuid
           description: The paymentid of this payment
         customerId:
           type: string  
+          format: uuid
           description: The customerid of the customer who order this
         address:
           type: string
@@ -138,6 +143,7 @@ tags:
     tags: [Order]          
     security:
       - customerAuth: []
+    summary: the update order's infomation apis   
     parameters:
       - in: path
         name: id
@@ -154,6 +160,69 @@ tags:
               $ref: '#/components/schemas/Order'
       500: 
         description: Internal Server Error
-      
+/api/orders/{id}/orderdetails:
+  post:
+    tags: [Order]
+    summary: the add orderdetails endpoint
+    security:
+      - customerAuth : []
+    parameters:
+      - in: path
+        name: orderId
+        schema:
+          type: string
+        description: the id of the order
+        required: true
+    requestBody:
+      required: true
+      description: the new order
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: the product's id
+              quantity:
+                type: number
+                description: the quantiy of the order detai
+    responses:
+      200:
+        description: order is add succses
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/OrderDetails'
+      500:
+        description: Bad Request or Internal Server Error      
+/api/orders/{id}/orderdetails/{detailId}:
+  post:
+    tags: [Order]
+    summary: the get orderdetails endpoint
+    security:
+      - customerAuth : []
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: the id of the order
+        required: true
+      - in: path
+        name: detailId
+        schema:
+          type: string
+        description: the id of the orderdetail
+        required: true  
+    responses:
+      200:
+        description: orderdetail is found
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/OrderDetails'
+      500:
+        description: Bad Request or Internal Server Error      
 
 
