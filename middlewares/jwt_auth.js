@@ -13,7 +13,11 @@ const customer_auth = async (req, res, next) => {
 		req.customer = customer;
 		next();
 	} catch (err) {
-		res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
+		res.status(BAD_REQUEST).json(
+			restError.BAD_REQUEST.extra({
+				error: "Wrong Authentication",
+			})
+		);
 	}
 };
 

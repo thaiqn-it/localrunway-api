@@ -5,7 +5,8 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
-	return await LocalBrand.findById(id);
+	const brand = await LocalBrand.findById(id);
+	return brand._doc;
 };
 
 const createOne = async (data) => {

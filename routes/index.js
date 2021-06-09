@@ -1,4 +1,5 @@
 const express = require("express");
+const { orderRouter } = require("./order.route");
 const { productRouter } = require("./product.route");
 const { localBrandRouter } = require("./localbrand.route");
 const { hashtagRouter } = require("./hashtag.route");
@@ -14,6 +15,7 @@ router.use("/payments", paymentRouter);
 router.use("/hashtags", hashtagRouter);
 router.use("/localbrands", localBrandRouter);
 router.use("/products", productRouter);
+router.use("/orders", orderRouter);
 
 router.get("/", async (req, res) => {
 	res.json({
