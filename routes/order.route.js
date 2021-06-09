@@ -1,4 +1,6 @@
 const express = require("express");
+const { orderDetailService } = require("../services/orderdetail.service");
+const { productService } = require("../services/product.service");
 const { excludeFields } = require("../utils");
 const { isMobilePhone } = require("validator");
 const { customer_auth } = require("../middlewares/jwt_auth");
@@ -97,7 +99,7 @@ router.get("/:id", customer_auth, async (req, res, next) => {
 		const payment = await paymentService.getById(order.paymentId);
 		return res.json({
 			order: {
-				...excludeFields(order, ["brandId", "paymentId"]),
+				...order,
 				localbrand: brand,
 				payment: payment,
 			},
@@ -153,12 +155,68 @@ router.put(
 			const order = await orderService.updateOne(id, data);
 			return res.json({ order });
 		} catch (err) {
-			console.log(err);
 			res
 				.status(INTERNAL_SERVER_ERROR)
 				.json(restError.INTERNAL_SERVER_ERROR.default());
 		}
 	}
 );
-
+router.post(
+	"/:id/orderdetails",
+	[
+		body("productId").notEmpty().withMessage("ProductId should not be empty"),
+		body("quantity").isInt().withMessage("Quantity should not be empty"),
+	],
+	async (req, res, next) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(BAD_REQUEST).json(
+				restError.BAD_REQUEST.extra({
+					errorParams: mapErrorArrayExpressValidator(errors.array()),
+				})
+			);
+		}
+		try {
+			const { id: orderId } = req.params;
+			const order = await orderService.getById(orderId);
+			if (order === null) throw new Error();
+			const { productId } = req.body;
+			const product = await productService.getById(productId);
+			if (product === null) throw new Error();
+			const unitPrice = product.price;
+			const { quantity } = req.body;
+			if (quantity > product.quantity) throw new Error();
+			const orderDetail = await orderDetailService.createOne({
+				orderId,
+				productId,
+				quantity,
+				unitPrice,
+			});
+			return res.json({
+				orderDetail,
+			});
+		} catch (err) {
+			return res
+				.status(INTERNAL_SERVER_ERROR)
+				.json(restError.INTERNAL_SERVER_ERROR.default());
+		}
+	}
+);
+router.get("/:id/orderdetails/:detailId", async (req, res, next) => {
+	const { id: orderId, detailId } = req.params;
+	try {
+		const orderDetail = await orderDetailService.getByIdAndOrderId(
+			detailId,
+			orderId
+		);
+		if (orderDetail === null) throw new Error();
+		return res.json({
+			orderDetail,
+		});
+	} catch (err) {
+		return res
+			.status(INTERNAL_SERVER_ERROR)
+			.json(restError.INTERNAL_SERVER_ERROR.default());
+	}
+});
 exports.orderRouter = router;
