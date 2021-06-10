@@ -127,6 +127,8 @@ router.post(
 		body("status").notEmpty().isIn(Object.values(PRODUCT_STATUS)),
 		body("type").notEmpty().isIn(Object.values(PRODUCT_TYPE)),
 		body("description").notEmpty(),
+		body("thumbnailUrl").notEmpty().isURL(),
+		body("media").notEmpty().isArray({ min: 1 }),
 		body("brandId").custom(async (brandId) => {
 			return (await localBrandService.getById(brandId)) !== null;
 		}),
@@ -165,6 +167,8 @@ router.put(
 		body("quantity").notEmpty().isInt(),
 		body("status").notEmpty().isIn(Object.values(PRODUCT_STATUS)),
 		body("type").notEmpty().isIn(Object.values(PRODUCT_TYPE)),
+		body("thumbnailUrl").notEmpty().isURL(),
+		body("media").notEmpty().isArray({ min: 1 }),
 		body("description").notEmpty(),
 		body("brandId").custom(async (brandId) => {
 			return (await localBrandService.getById(brandId)) !== null;

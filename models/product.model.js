@@ -16,6 +16,10 @@ const productSchema = new mongoose.Schema(
 			required: true,
 			ref: "Category",
 		},
+		thumbnailUrl: {
+			type: String,
+			required: true,
+		},
 		name: {
 			type: String,
 			required: true,
@@ -75,6 +79,12 @@ productSchema.virtual("localbrand", {
 	localField: "brandId",
 	foreignField: "_id",
 	justOne: true,
+});
+
+productSchema.virtual("media", {
+	ref: "ProductMedia",
+	localField: "_id",
+	foreignField: "productId",
 });
 
 productSchema.virtual("producthashtags", {

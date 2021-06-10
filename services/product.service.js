@@ -1,3 +1,4 @@
+const { productMediaService } = require("./productmedia.service");
 const { PRODUCT_STATUS } = require("../models/enum");
 const { hashtagService } = require("./hashtag.service");
 const { ProductHashtag } = require("../models/producthashtag.model");
@@ -11,12 +12,15 @@ const getById = async (id, populateDetail = false) => {
 	}
 	let product = await Product.findOne({ _id: id })
 		.populate("category")
-		.populate("localbrand");
+		.populate("localbrand")
+		.populate("media")
+		.exec();
 	if (product === null) return Promise.reject();
 	const hashtags = await hashtagService.getAllByProductId(product.id);
 	return {
 		...product._doc,
 		category: product.category,
+		media: product.media,
 		localbrand: product.localbrand,
 		hashtags,
 	};
@@ -107,14 +111,16 @@ const deleteById = async (id) => {
 	);
 };
 
-const createOne = async ({ _id, ...data }) => {
-	const product = new Product(data);
+const createOne = async ({ _id, media, ...data }) => {
+	const product = await new Product(data).save();
+	await productMediaService.resetProductMedia(product.id, media);
 	return await product.save();
 };
 
-const updateById = async (id, { _id, ...data }) => {
-	const product = await Product.findByIdAndUpdate(id, data, { new: true });
-	return product;
+const updateById = async (id, { _id, media, ...data }) => {
+	await Product.findByIdAndUpdate(id, data, { new: true });
+	await productMediaService.resetProductMedia(id, media);
+	return await getById(id, true);
 };
 
 const addProductHashtag = async ({ productId, hashtagId }) => {
