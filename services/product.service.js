@@ -6,15 +6,21 @@ const { excludeFields } = require("../utils");
 const { Product } = require("../models/product.model");
 const { Category } = require("../models/category.model");
 
-const getById = async (id, populateDetail = false) => {
-	if (populateDetail === false) {
-		return await Product.findById(id);
+const getById = async (id, { populates, ...options }) => {
+	let product = Product.findOne({ _id: id });
+	if (populates.includes("all")) {
+		populates = ["category", "localbrand", "media"];
 	}
-	let product = await Product.findOne({ _id: id })
-		.populate("category")
-		.populate("localbrand")
-		.populate("media")
-		.exec();
+	if (populates.includes("category")) {
+		product = product.populate("category");
+	}
+	if (populates.includes("localbrand")) {
+		product = product.populate("localbrand");
+	}
+	if (populates.includes("media")) {
+		product = product.populate("media");
+	}
+	product = await product;
 	if (product === null) return Promise.reject();
 	const hashtags = await hashtagService.getAllByProductId(product.id);
 	return {
@@ -120,7 +126,9 @@ const createOne = async ({ _id, media, ...data }) => {
 const updateById = async (id, { _id, media, ...data }) => {
 	await Product.findByIdAndUpdate(id, data, { new: true });
 	await productMediaService.resetProductMedia(id, media);
-	return await getById(id, true);
+	return await getById(id, {
+		populates: ["all"],
+	});
 };
 
 const addProductHashtag = async ({ productId, hashtagId }) => {

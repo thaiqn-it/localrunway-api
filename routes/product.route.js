@@ -19,8 +19,11 @@ const router = express.Router();
 
 router.get("/:id", async (req, res, next) => {
 	const { id } = req.params;
+	const { populates } = req.query;
 	try {
-		const product = await productService.getById(id, true);
+		const product = await productService.getById(id, {
+			populates: populates ?? [],
+		});
 		return res.json({
 			product,
 		});
