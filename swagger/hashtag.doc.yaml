@@ -5,14 +5,20 @@ components:
       required:
         - name
       properties:
-        id:
+        _id:
           type: string
           description:  The auto generate id of Hashtag
         name:
           type: string
           description: Name of the hashtag
       example:
+        _id: 60ae616c056bb60d1873e8d5
         name: thoi thuong
+  response:
+    HashtagResponse:
+      type: object
+      properties:
+              
 tags:
   name: Hashtag
   description: The Hashtag Management Apis
@@ -26,9 +32,12 @@ tags:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Hashtag'
+            type: object
+            properties:
+              hashtags:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Hashtag'
   post:
     summary: "insert hashtag"
     tags: [Hashtag]
@@ -59,14 +68,14 @@ tags:
         required: true
         description: The hashtag's id
     responses:
-    200:
-      description: the hashtag
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Hashtag'
-    404:
-      description: the hashtag is not found
+      200:
+        description: the hashtag
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Hashtag'
+      404:
+        description: the hashtag is not found
   put:
     summary: "update hashtag by id"
     tags: [Hashtag]

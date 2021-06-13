@@ -5,14 +5,28 @@ components:
       required:
         - name
       properties:
-        id:
+        _id:
           type: string
           description: The auto generate id of Category
         name:
           type: string
           description: Name of the category
       example:
+        _id: 60ae5abe1bca945ff4b53225
         name: ao dai
+  requestBodies:
+    categoryReqBody:
+      description: a json object contain category infomation
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+          example:
+            name: ao dai      
 tags:
   name: Categories
   description: The Category Management Apis
@@ -26,27 +40,29 @@ tags:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/Category"
+              type: object
+              properties:
+                categories:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Category"
       500:
         description: Internal server error          
   post:
     summary: "Insert new category"
     tags: [Categories]
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Category"
+      $ref: "#/components/requestBodies/categoryReqBody"
     responses:
       200:
-        description: the inserted category
+        description: the updated category
         content:
           application/json:
             schema:
-              ref: "#/components/schemas/Category"
+              type: object
+              properties:
+                category:
+                  $ref : '#/components/schemas/Category' 
       500:
         description: bad request
 /api/categories/{id}:
@@ -60,6 +76,7 @@ tags:
           type: string
         required: true
         description: The category id
+        example: 60ae5abe1bca945ff4b53225  
     requestBody:
       required: true
       content:
@@ -72,7 +89,10 @@ tags:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Category"
+              type: object
+              properties:
+                category:
+                  $ref: '#/components/schemas/Category'
       500:
         description: bad request or server error
   get:
@@ -85,13 +105,17 @@ tags:
           type: string
         required: true
         description: The category id
+        example: 60ae5abe1bca945ff4b53225  
     responses:
       200:
         description: the category is found
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Category"
+              type: object
+              properties:
+                category:
+                  $ref = '#/components/schemas/Category'
       404:
         description: the category is not found
   delete:
@@ -104,6 +128,7 @@ tags:
           type: string
         required: true
         description: The category id
+        example: 60ae5abe1bca945ff4b53225  
     responses:
       200:
         description: the category is found and deleted

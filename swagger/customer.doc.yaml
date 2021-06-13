@@ -60,6 +60,37 @@ components:
         bust:
           type: number
           description: The customer's bust number
+  response:
+    customerProfile:
+      type: object
+      properties: 
+        status: 
+          type: string
+        _id:   
+          type: string
+          fommat: uuid
+        email:
+          type: string
+        phoneNumber: 
+          type: string
+        name:
+          type: string
+        gender: 
+          type: string
+        job:
+          type: string
+        height:
+          type: number
+        weight:
+          type: number
+        bust: 
+          type: number
+        waist:
+          type: number
+        hip: 
+          type: number
+        hobby:
+          type: string          
 tags:
   name: Customer
   description: The Customer Management Apis
@@ -74,10 +105,19 @@ tags:
         description: the customer's infomation
         content:
           application/json:
+            type: object
             schema:
-              type: 
-              items:
-                $ref: "#/components/schemas/Customer"
+              $ref: '#/components/response/customerProfile'
+      400:
+        description: Wrong Authentication
+        content:
+          application/json:
+            type: object
+            schema:
+              error:
+                type: string
+            example:
+              error: Wrong Authentication          
 /api/customers/login:
   post:
     summary: "Login"
@@ -106,6 +146,7 @@ tags:
               properties:
                 token:
                   type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcklkIjoiNjBhZTU5YzgxYmNhOTQ1ZmY0YjUzMWU5IiwiaWF0IjoxNjIzNDIyNDI4fQ.JlN18-raoWUZP_aKZ427PW0SxLJxPRCmhEqg3BSJYPU  
       500:
         description: bad request
 
