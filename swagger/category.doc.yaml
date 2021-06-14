@@ -115,7 +115,7 @@ tags:
               type: object
               properties:
                 category:
-                  $ref = '#/components/schemas/Category'
+                  $ref: '#/components/schemas/Category'
       404:
         description: the category is not found
   delete:
@@ -135,6 +135,9 @@ tags:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Category"
+              type: object
+              properties:
+                category:
+                  $ref: '#/components/schemas/Category'
       500:
         description: the category is not found
