@@ -119,7 +119,10 @@ tags:
       content:
         application/json:
           schema:
-            $ref: '#/components/response/LocalbrandExcludePassword'
+            type: object
+            properties:
+              localband:
+                $ref: '#/components/response/LocalbrandExcludePassword'
      500:
       description: bad request
 /api/localbrands/{id}:
@@ -139,7 +142,10 @@ tags:
         content:
           application/json:
             schema:
-              $ref: '#/components/response/LocalbrandExcludePassword'
+              type: object
+              properties:
+                localband:
+                  $ref: '#/components/response/LocalbrandExcludePassword'
       404:
         description: the localbrand is not found      
   put:
@@ -164,7 +170,10 @@ tags:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Localbrand'
+              type: object
+              properties:
+                localband:
+                  $ref: '#/components/schemas/Localbrand'
       500:
         description: bad request
   delete:
@@ -183,6 +192,9 @@ tags:
         content:
           application/json:
             schema:
-              $ref: '#/components/response/LocalbrandExcludePassword'
+              type: object
+              properties:
+                localband:
+                  $ref: '#/components/schemas/Localbrand'
       500:
         description: bad request      

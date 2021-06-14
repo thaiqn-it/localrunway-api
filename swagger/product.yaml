@@ -54,9 +54,7 @@ components:
             description: the size of the product
         type:
             type: string
-            enum:  
-            - "ACTIVE"
-            - "INACTIVE"
+            enum:  [GENERAL_PRODUCT , DETAIL_PRODUCT]
             description: the type of the product
             required: true
         timestamps:
@@ -80,17 +78,7 @@ components:
                 "name": "docdao"
             }
         ]
-    Hashtag: 
-      type: object
-      properties:
-        id:
-          type: "string"
-          description: The auto generate id of hashtag
-        name:
-          type: "string"
-          description: The name of hashtag
-      xml:
-        name: "Hashtag"
+    
 
     ProductHashtag:
       type: object
@@ -104,14 +92,7 @@ components:
         hashtagId: 
           type: "string"
           description: The id of hashtag
-  requestBodies:
-    producesReqBody:
-      description: A Json object contain product's OrderData
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Product'         
+      
 paths:
   /api/products/{id}: 
     get: 
@@ -132,15 +113,60 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                $ref: "#/components/schemas/Product"
+                type: object
+                properties:
+                  product:
+                    $ref: "#/components/schemas/Product"
         '404':
           description: product not found
+    delete:
+      tags:
+        - "Product"
+      summary: "Delete a product by Id"
+      parameters:
+      - name: id
+        in: path
+        required: true
+      responses:
+        200:
+          description: delete successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Product"
+        500:
+          description: Internal server error
+    put:
+      tags:
+        - "Product"
+      summary: "Modify a product"
+      parameters:
+      - name: id 
+        in: path 
+        type: "string"
+        description: id of product 
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/ProductReqBody"
+      responses:
+        200:
+          description: add successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Product"
+        500:
+          description: Internal server error      
 
   /api/products/{id}/hashtags:
     get: 
-      tags:
-        - Product
+      tags: [ProductHashtag]
       summary: Return Hashtags by product id
       produces:
         - application/json
@@ -156,8 +182,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                $ref: "#/components/schemas/Hashtag"
+                type: object
+                properties:
+                  hashtag:
+                    type: array
+                    items: 
+                      $ref: "#/components/schemas/Hashtag"
         500:
           description: Internal server error
     post:
@@ -170,25 +200,28 @@ paths:
           type: "string"
           description: path parameter takes the product id
           required: true
-        - name: hashtagId 
-          in: body 
-          type: "string"
-          description: path parameter takes the product id
-          required: true
       tags: [ProductHashtag]
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProductHashtag"
+              type: object
+              properties:
+                hashtagId:
+                  type: string
+                  description: path parameter takes the product id
+                  required: true  
       responses:
         200:
           description: the inserted category
           content:
             application/json:
               schema:
-                ref: "#/components/schemas/Category"
+                type: object
+                properties:
+                  ProductHashtag:
+                      $ref: '#/components/schemas/ProductHashtag'
         500:
           description: bad request
   /api/products/{id}/hashtags/{hashtagId}:
@@ -205,12 +238,14 @@ paths:
         required: true
       responses:
         200:
-          description: delete successfully
+          description: the hashtag is deleted 
           content:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/ProductHashtag"
+                properties:
+                  ProductHashtag:
+                    $ref: '#/components/schemas/ProductHashtag'
         500:
           description: Internal server error
   /api/products:
@@ -247,74 +282,25 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/definitions/ConditionalProduct"
+                type: object
+                properties:
+                  product:
+                    type: array
+                    items:
+                      $ref: "#/definitions/ConditionalProduct"
         500:
           description: Internal server error
     post:
       tags:
         - "Product"
       summary: "Create a product"
-      parameters:
-      - name: name 
-        in: body 
-        type: "string"
-        description: name of product 
-        required: true  
-      - name: color 
-        in: body 
-        type: "string"
-        description: color of product 
-        required: true  
-      - name: size 
-        in: body 
-        type: "string"
-        description: size of product   
-        required: true       
-      - name: price 
-        in: body 
-        type: "integer"
-        description: price of product 
-        required: true  
-      - name: quantity 
-        in: body 
-        type: "integer"
-        description: quantity of product
-        required: true  
-      - name: status 
-        in: body 
-        type: "string"
-        description: status of product 
-        required: true  
-      - name: type 
-        in: body 
-        type: "string"
-        description: type of product     
-        required: true     
-      - name: description 
-        in: body 
-        type: "string"
-        description: description of product 
-        required: true 
-      - name: thumbanailUrl
-        type: string
-        description: the thumbanailUrl of the product
+      
+      requestBody:
         required: true
-      - name: media
-        type: string
-        description: the media id of the product
-        required: true
-      - name: brandId 
-        in: body 
-        type: "string"
-        description: brandId of product
-        required: true     
-      - name: categoryId 
-        in: body 
-        type: "string"
-        description: categoryId of product    
-        required: true  
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/ProductReqBody'   
       responses:
         200:
           description: create successfully
@@ -322,111 +308,25 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Product"
+                properties:
+                    product:
+                      $ref: "#/components/schemas/Product"
         500:
           description: Internal server error
 
-  /api/products/:id:
-    delete:
-      tags:
-        - "Product"
-      summary: "Delete a product by Id"
-      parameters:
-      - name: id
-        in: path
-        required: true
-      responses:
-        200:
-          description: delete successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/Product"
-        500:
-          description: Internal server error
-    put:
-      tags:
-        - "Product"
-      summary: "Modify a product"
-      parameters:
-      - name: id 
-        in: path 
-        type: "string"
-        description: id of product 
-        required: true
-      - name: name 
-        in: body 
-        type: "string"
-        description: name of product 
-        required: true
-      - name: color 
-        in: body 
-        type: "string"
-        description: color of product 
-        required: true
-      - name: size 
-        in: body 
-        type: "string"
-        description: size of product        
-        required: true
-      - name: price 
-        in: body 
-        type: "integer"
-        description: price of product 
-        required: true
-      - name: quantity 
-        in: body 
-        type: "integer"
-        description: quantity of product 
-        required: true
-      - name: status 
-        in: body 
-        type: "string"
-        description: status of product 
-        required: true
-      - name: type 
-        in: body 
-        type: "string"
-        description: type of product     
-        required: true   
-      - name: description 
-        in: body 
-        type: "string"
-        description: description of product 
-        required: true
-      - name: thumbanailUrl
-        type: string
-        description: the thumbanailUrl of the product
-        required: true
-      - name: media
-        type: string
-        description: the media id of the product
-        required: true  
-      - name: brandId 
-        in: body 
-        type: "string"
-        description: brandId of product  
-        required: true   
-      - name: categoryId 
-        in: body 
-        type: "string"
-        description: categoryId of product  
-        required: true   
-      responses:
-        200:
-          description: add successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/Product"
-        500:
-          description: Internal server error
+ 
+    
+
+
+
 definitions: # Schema definition for the request body
   ConditionalProduct:
     type: object
     properties:
+      products:
+        type: array
+        items:
+          $ref: '#/components/schemas/Product'
       totalItems:
         type: integer
         description: The total items of search values
@@ -454,10 +354,47 @@ definitions: # Schema definition for the request body
       nextPage:
         type: integer
         description: total pages left
-      products:
-        type: array
-        items:
-          $ref: '#/components/schemas/Product'
+  ProductReqBody:
+    description: A Json object contain product's OrderData
+    type: object
+    properties:
+      name:
+        type: string
+        required: true
+        description: the name of the Product
+      description:
+        type: string
+        required: true
+        description: the description of the product        
+      status:
+        type: string
+        enum : ["ACTIVE", "INACTIVE"]
+        description: the status of Localbrand
+      price:
+        type: number
+        description: The price of product
+        required: true
+      color:
+        type: string
+        description: The color of the product
+        required: true
+      quantiy:
+        type: number
+        description: The quantity of product
+        required: true
+      parentId:
+        type: string
+        format: uuid
+        description: the parents's product id of this product refer to
+      size:
+        type: string
+        description: the size of the product
+      type:
+        type: string
+        enum:  ["GENERAL_PRODUCT" , "DETAIL_PRODUCT"]
+        description: the type of the product
+        required: true
+
 
       
 
