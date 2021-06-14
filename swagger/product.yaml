@@ -9,12 +9,26 @@ components:
           description: The auto generate id of Localbrand
         brandId:
           type: "string"
+          required: true
           format: "uuid"
           description: The Foreign key from Localbrand
         categoryId:
             type: string
-            fommat: uuid
+            required: true
+            format: uuid
             description: The Foreign key from Catgory
+        thumbanailUrl:
+            type: string
+            required: true
+            description: the Url of thumbnail Image
+        name:
+            type: string
+            required: true
+            description: the name of the Product
+        description:
+            type: string
+            required: true
+            description: the description of the product        
         status:
             type: string
             enum : ["ACTIVE", "INACTIVE"]
@@ -22,15 +36,18 @@ components:
         price:
             type: number
             description: The price of product
+            required: true
         color:
             type: string
             description: The color of the product
+            required: true
         quantiy:
             type: number
             description: The quantity of product
+            required: true
         parentId:
             type: string
-            fommat: uuid
+            format: uuid
             description: the parents's product id of this product refer to
         size:
             type: string
@@ -41,6 +58,11 @@ components:
             - "ACTIVE"
             - "INACTIVE"
             description: the type of the product
+            required: true
+        timestamps:
+            type: string
+            format: date-time
+            description: the time of this product create    
       example: 
         status: "ACTIVE"
         _id: "60b09f8c7904b66b746cca2c"
@@ -82,6 +104,14 @@ components:
         hashtagId: 
           type: "string"
           description: The id of hashtag
+  requestBodies:
+    producesReqBody:
+      description: A Json object contain product's OrderData
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Product'         
 paths:
   /api/products/{id}: 
     get: 
@@ -266,7 +296,15 @@ paths:
         in: body 
         type: "string"
         description: description of product 
-        required: true  
+        required: true 
+      - name: thumbanailUrl
+        type: string
+        description: the thumbanailUrl of the product
+        required: true
+      - name: media
+        type: string
+        description: the media id of the product
+        required: true
       - name: brandId 
         in: body 
         type: "string"
@@ -357,6 +395,14 @@ paths:
         type: "string"
         description: description of product 
         required: true
+      - name: thumbanailUrl
+        type: string
+        description: the thumbanailUrl of the product
+        required: true
+      - name: media
+        type: string
+        description: the media id of the product
+        required: true  
       - name: brandId 
         in: body 
         type: "string"
