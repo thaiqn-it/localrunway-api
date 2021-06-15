@@ -4,6 +4,10 @@ const getAll = async () => {
 	return await LocalBrand.find({});
 };
 
+const getOne = async ({ ...data }) => {
+	return await LocalBrand.findOne(data);
+};
+
 const getById = async (id) => {
 	const brand = await LocalBrand.findById(id);
 	return brand._doc;
@@ -33,4 +37,5 @@ exports.localBrandService = {
 	createOne,
 	deleteById,
 	updateOne,
+	getOne,
 };

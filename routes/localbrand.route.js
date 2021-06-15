@@ -1,4 +1,8 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
+const { brand_auth } = require("../middlewares/jwt_auth");
+const { JWT_SECRET_KEY } = require("../constants");
+const { comparePassword } = require("../utils");
 const { excludePassword } = require("../utils");
 const { hashPassword } = require("../utils");
 const { isMobilePhone } = require("validator");
@@ -23,6 +27,27 @@ const validateVNPhoneNumber = (value) => {
 	return Promise.resolve();
 };
 
+router.post("/login", async (req, res, next) => {
+	const { username, password } = req.body;
+	try {
+		const localBrand = await localBrandService.getOne({ username });
+		if (localBrand === null) throw new Error();
+		if (comparePassword(password, localBrand.password)) {
+			const token = jwt.sign(
+				{
+					brandId: localBrand.id,
+				},
+				JWT_SECRET_KEY
+			);
+			return res.json({
+				token,
+			});
+		}
+	} catch (err) {
+		res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
+	}
+});
+
 router.get("/", async (req, res, next) => {
 	const localBrands = await localBrandService.getAll();
 	return res.json({
@@ -43,6 +68,7 @@ router.get("/:id", async (req, res, next) => {
 	}
 });
 
+// admin
 router.post(
 	"/",
 	[
@@ -108,8 +134,10 @@ router.post(
 	}
 );
 
+// admin
 router.put(
 	"/:id",
+	brand_auth(true),
 	[
 		body("name").notEmpty().withMessage("Name should not be empty"),
 		body("address").notEmpty().withMessage("Address should not be empty"),
@@ -146,15 +174,16 @@ router.put(
 			logoUrl,
 		} = req.body;
 		const { id } = req.params;
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(BAD_REQUEST).json(
-				restError.BAD_REQUEST.extra({
-					errorParams: mapErrorArrayExpressValidator(errors.array()),
-				})
-			);
-		}
 		try {
+			if (!req.localBrand || id !== req.localBrand.id) throw new Error();
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				return res.status(BAD_REQUEST).json(
+					restError.BAD_REQUEST.extra({
+						errorParams: mapErrorArrayExpressValidator(errors.array()),
+					})
+				);
+			}
 			const localBrand = await localBrandService.updateOne(id, {
 				name,
 				address,
@@ -175,6 +204,7 @@ router.put(
 	}
 );
 
+// admin
 router.delete("/:id", async (req, res, next) => {
 	const { id } = req.params;
 	try {

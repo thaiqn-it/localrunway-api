@@ -93,7 +93,7 @@ const search = async ({ ...params }) => {
 			},
 		};
 	}
-	const products = await Product.paginate(q, {
+	let data = await Product.paginate(q, {
 		sort: s,
 		limit: PAGE_LIMIT,
 		page: page ?? 1,
@@ -102,7 +102,12 @@ const search = async ({ ...params }) => {
 			totalDocs: "totalItems",
 		},
 	});
-	return products;
+
+	for (let product of data.products) {
+		product._doc.hashtags = await hashtagService.getAllByProductId(product.id);
+	}
+
+	return data;
 };
 
 const deleteById = async (id) => {
