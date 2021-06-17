@@ -1,8 +1,15 @@
 const express = require("express");
-const { BAD_REQUEST } = require("http-status");
+const { BAD_REQUEST, INTERNAL_SERVER_ERROR } = require("http-status");
 const { restError } = require("../errors/rest");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const { hashPassword } = require("../utils");
+const { mapErrorArrayExpressValidator } = require("../utils");
+const { validationResult } = require("express-validator");
+const { validateVNPhoneNumber } = require("../utils");
+const { CUSTOMER_GENDER } = require("../models/enum");
+const { CUSTOMER_STATUS } = require("../models/enum");
+const { body } = require("express-validator");
 const { excludePassword } = require("../utils");
 const { comparePassword } = require("../utils");
 const { JWT_SECRET_KEY } = require("../constants");
@@ -63,5 +70,77 @@ router.post("/fbLogin", async (req, res, next) => {
 		return res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
 	}
 });
+
+router.post(
+	"/register",
+	[
+		body("phoneNumber")
+			.notEmpty()
+			.withMessage("Phone Number should not be empty")
+			.bail()
+			.custom(validateVNPhoneNumber)
+			.bail()
+			.custom(async (phoneNumber) => {
+				if (
+					(await customerService.getOne({
+						phoneNumber,
+					})) !== null
+				) {
+					return Promise.reject("Phone Number have already existed");
+				}
+				return Promise.resolve();
+			}),
+		body("email").isEmail().withMessage("Email wrong format"),
+		body("password")
+			.isLength({
+				min: 8,
+			})
+			.withMessage("Password should be at least 8 chars"),
+		body("hobby").optional(),
+		body("job").optional(),
+		body("waist").optional().isInt({ min: 0 }),
+		body("hip").optional().isInt({ min: 0 }),
+		body("bust").optional().isInt({ min: 0 }),
+		body("name").notEmpty().withMessage("Name should not be empty"),
+		body("fb_userId").optional(),
+		body("status")
+			.isIn(Object.values(CUSTOMER_STATUS))
+			.withMessage(`Status must be within ${Object.values(CUSTOMER_STATUS)}`),
+		body("gender")
+			.isIn(Object.values(CUSTOMER_GENDER))
+			.withMessage(`Gender must be within ${Object.values(CUSTOMER_GENDER)}`),
+		body("height")
+			.isInt({ min: 0 })
+			.withMessage("Height should be a positive number"),
+		body("weight")
+			.isInt({ min: 0 })
+			.withMessage("Weight should be a positive number"),
+	],
+	async (req, res, next) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(BAD_REQUEST).json(
+				restError.BAD_REQUEST.extra({
+					errorParams: mapErrorArrayExpressValidator(errors.array()),
+				})
+			);
+		}
+		try {
+			const data = req.body;
+			const customer = await customerService.createOne({
+				...data,
+				password: hashPassword(data.password),
+			});
+			if (customer === null) throw new Error();
+			return res.json({
+				customer,
+			});
+		} catch (err) {
+			return res
+				.status(INTERNAL_SERVER_ERROR)
+				.json(restError.INTERNAL_SERVER_ERROR.default());
+		}
+	}
+);
 
 module.exports = { customerRouter: router };

@@ -15,9 +15,6 @@ const customerSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	token: {
-		type: String,
-	},
 	name: {
 		type: String,
 		required: true,

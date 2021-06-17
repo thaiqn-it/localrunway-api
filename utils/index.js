@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const { isMobilePhone } = require("validator");
 const { BCRYPT_SALT_ROUND } = require("../constants");
 
 exports.mapErrorArrayExpressValidator = (errorArr) => {
@@ -33,4 +34,13 @@ exports.excludePassword = (obj, passwordField) => {
 	if (!passwordField) passwordField = "password";
 	obj.password = undefined;
 	return obj;
+};
+
+exports.validateVNPhoneNumber = (value) => {
+	if (!isMobilePhone(value, "vi-VN")) {
+		return Promise.reject(
+			"Phone Number should be from VN. Prefix +84, 84, 0 is OK"
+		);
+	}
+	return Promise.resolve();
 };
