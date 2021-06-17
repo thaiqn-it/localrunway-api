@@ -34,7 +34,8 @@ const getById = async (id, { populates, ...options }) => {
 
 const search = async ({ ...params }) => {
 	const PAGE_LIMIT = 5;
-	const { categoryId, sort, queryValue, sizes, page, brandIds } = params;
+	const { categoryId, sort, queryValue, sizes, page, brandIds, prices } =
+		params;
 	let q = {};
 	let s = {};
 	if (categoryId) {
@@ -92,6 +93,18 @@ const search = async ({ ...params }) => {
 				$in: brandIds,
 			},
 		};
+	}
+	if (Array.isArray(prices) && prices.length === 2) {
+		const [minPrice, maxPrice] = prices.map((x) => parseInt(x));
+		if (minPrice < maxPrice) {
+			q = {
+				...q,
+				price: {
+					$gte: minPrice,
+					$lte: maxPrice,
+				},
+			};
+		}
 	}
 	let data = await Product.paginate(q, {
 		sort: s,
