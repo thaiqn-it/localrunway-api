@@ -77,7 +77,7 @@ const search = async ({ ...params }) => {
 			};
 		}
 	}
-	if (Array.isArray(sizes)) {
+	if (Array.isArray(sizes) && brandIds.length > 0) {
 		q = {
 			...q,
 			size: {
@@ -85,7 +85,7 @@ const search = async ({ ...params }) => {
 			},
 		};
 	}
-	if (Array.isArray(brandIds)) {
+	if (Array.isArray(brandIds) && brandIds.length > 0) {
 		q = {
 			...q,
 			brandId: {
@@ -96,6 +96,7 @@ const search = async ({ ...params }) => {
 	let data = await Product.paginate(q, {
 		sort: s,
 		limit: PAGE_LIMIT,
+		populate: ["localbrand"],
 		page: page ?? 1,
 		customLabels: {
 			docs: "products",
@@ -104,6 +105,7 @@ const search = async ({ ...params }) => {
 	});
 
 	for (let product of data.products) {
+		product._doc.brandName = product.localbrand.name;
 		product._doc.hashtags = await hashtagService.getAllByProductId(product.id);
 	}
 

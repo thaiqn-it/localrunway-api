@@ -32,6 +32,7 @@ router.post("/login", async (req, res) => {
 				token,
 			});
 		}
+		throw new Error();
 	} catch (err) {
 		res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
 	}
