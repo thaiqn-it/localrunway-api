@@ -2,6 +2,7 @@ const express = require("express");
 const { BAD_REQUEST } = require("http-status");
 const { restError } = require("../errors/rest");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
 const { excludePassword } = require("../utils");
 const { comparePassword } = require("../utils");
 const { JWT_SECRET_KEY } = require("../constants");
@@ -35,6 +36,31 @@ router.post("/login", async (req, res) => {
 		throw new Error();
 	} catch (err) {
 		res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
+	}
+});
+
+router.post("/fbLogin", async (req, res, next) => {
+	const { access_token } = req.body;
+	try {
+		const fbRes = await axios.get(
+			`https://graph.facebook.com/me?access_token=${access_token}`
+		);
+		const { id: fb_userId } = fbRes.data;
+		const customer = await customerService.getOne({
+			fb_userId,
+		});
+		if (customer === null) throw new Error();
+		const token = jwt.sign(
+			{
+				customerId: customer.id,
+			},
+			JWT_SECRET_KEY
+		);
+		return res.json({
+			token,
+		});
+	} catch (err) {
+		return res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
 	}
 });
 

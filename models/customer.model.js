@@ -55,6 +55,9 @@ const customerSchema = new mongoose.Schema({
 	bust: {
 		type: Number,
 	},
+	fb_userId: {
+		type: String,
+	},
 });
 
 const Customer = mongoose.model("Customer", customerSchema);
