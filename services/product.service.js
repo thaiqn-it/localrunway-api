@@ -6,7 +6,7 @@ const { excludeFields } = require("../utils");
 const { Product } = require("../models/product.model");
 const { Category } = require("../models/category.model");
 
-const getById = async (id, { populates, ...options }) => {
+const getById = async (id, { populates = [], ...options } = {}) => {
 	let product = Product.findOne({ _id: id });
 	if (populates.includes("all")) {
 		populates = ["category", "localbrand", "media"];
