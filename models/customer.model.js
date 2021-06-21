@@ -55,6 +55,10 @@ const customerSchema = new mongoose.Schema({
 	fb_userId: {
 		type: String,
 	},
+	firstBoughtBrands: {
+		type: String,
+		default: "",
+	},
 });
 
 const Customer = mongoose.model("Customer", customerSchema);

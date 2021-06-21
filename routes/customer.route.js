@@ -115,6 +115,11 @@ router.post(
 		body("weight")
 			.isInt({ min: 0 })
 			.withMessage("Weight should be a positive number"),
+		body("firstBoughtBrandIds")
+			.isArray()
+			.withMessage(
+				"Bought brands should be included as an array of brands ids"
+			),
 	],
 	async (req, res, next) => {
 		const errors = validationResult(req);
