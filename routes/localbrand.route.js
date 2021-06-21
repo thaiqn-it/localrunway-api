@@ -56,6 +56,13 @@ router.get("/", async (req, res, next) => {
 	});
 });
 
+router.get("/me", brand_auth(), async (req, res, next) => {
+	const localBrand = req.localBrand;
+	return res.json({
+		...excludePassword(localBrand._doc),
+	});
+});
+
 router.get("/:id", async (req, res, next) => {
 	const { id } = req.params;
 	try {
