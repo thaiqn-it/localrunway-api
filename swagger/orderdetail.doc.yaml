@@ -43,13 +43,12 @@ tags:
   post:
     tags: [OrderDetails]
     summary: the add orderdetails endpoint
-    security:
-      - customerAuth : []
     parameters:
       - in: path
-        name: orderId
+        name: id
         schema:
           type: string
+        example: 60d0a2972066325cf0c2e5d9  
         description: the id of the order
         required: true
     requestBody:
@@ -66,6 +65,9 @@ tags:
               quantity:
                 type: number
                 description: the quantiy of the order detai
+            example:
+              productId: 60b09f8c7904b66b746cca2c
+              quantity: 10
     responses:
       200:
         description: order is add succses
@@ -76,7 +78,7 @@ tags:
       500:
         description: Bad Request or Internal Server Error      
 /api/orders/{id}/orderdetails/{detailId}:
-  post:
+  get:
     tags: [OrderDetails]
     summary: the get orderdetails endpoint
     security:
@@ -86,6 +88,7 @@ tags:
         name: id
         schema:
           type: string
+        example: 60b09f8c7904b66b746cca2c
         description: the id of the order
         required: true
       - in: path

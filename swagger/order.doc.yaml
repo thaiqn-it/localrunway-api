@@ -41,35 +41,64 @@ components:
         phoneNumber:
           type: string
           description: the phoneNumber of the customer order this
-        timestamps:
+        createAt:
           type: string
           format: date-time
           description: the date of this order is ordered
+        updateAt:
+          type: string
+          format: date-time
+          description: the date of the lastest update of this order
       example:
-        id: dummy
-        brandID: dummy
+        id: 60d0a2972066325cf0c2e5d9
+        brandID: 60ae5bbd1bca945ff4b5322d
         status: SHIPPING
-        paymentId: dummy text
+        paymentId: 60ae5b0e1bca945ff4b53229
         customerId: dummy
         address: 300 Cong Hoa Street , District 3 , Ho Chi Minh City
         recipientName: Dinh Phu Cuong
-        phoneNumber: 0123455667
-        timestamps: 02/09/2021
+        phoneNumber: "0123455667"
+        createAt: 02/09/2021
+        updateAt: 02/09/2021
+  requestBody:
+    OrderReqBody:
+      description: a json object contain order infomation
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              brandId:
+                type: string
+              status:
+                type: string
+                enum: ["RECEIVED","SHIPPING","COMPLETED","CANCELLED"]   
+              paymentId:
+                type: string
+              address:
+                type: string
+              phoneNumber:
+                type: string
+              recipientName:
+                type: string  
+          example:
+            name: ao dai  
+            brandId: 60ae5bbd1bca945ff4b5322d
+            status: RECEIVED
+            paymentId: 60ae5b0e1bca945ff4b53229
+            address: 300 Cong Hoa Street , District 3 , Ho Chi Minh City
+            phoneNumber: "0937287222"
+            recipientName: "Cuong"
+
+                      
   responses:
     OrderData:
       type: object
       properties:
-        id:
+        _id:
           type: string
           description: The auto generate id of Category
-        localband:
-          $ref: '#/components/schemas/Localbrand'
-        status:
-          type: string
-          description: The status of this Order
-          enum: ["RECEIVED" , "SHIPPING" , "COMPLETED" , "CANCELLED"]  
-        payment:
-          $ref: '#/components/schemas/Payment'
         customerId:
           type: string  
           description: The customerid of the customer who order this
@@ -85,7 +114,23 @@ components:
         timestamps:
           type: string
           format: date-time
-          description: the date of this order is ordered      
+          description: the date of this order is ordered
+        createAt:
+          type: string
+          format: date-time
+          description: the date of this order is ordered
+        updateAt:
+          type: string
+          format: date-time
+          description: the date of the lastest update of this order 
+        localband:
+          $ref: '#/components/schemas/Localbrand'
+        status:
+          type: string
+          description: The status of this Order
+          enum: ["RECEIVED" , "SHIPPING" , "COMPLETED" , "CANCELLED"]  
+        payment:
+          $ref: '#/definitions/Payment'       
 tags:
   name: Order
   description: The Order Management Apis
@@ -96,12 +141,7 @@ tags:
     security:
       - customerAuth : []
     requestBody:
-      required: true
-      description: the new order
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Order'
+      $ref: '#/components/requestBody/OrderReqBody'
     responses:
       200:
         description: order is add succses
@@ -125,6 +165,7 @@ tags:
         name: id
         schema: 
           type: string
+        example: 660d0a2972066325cf0c2e5d9   
         required: true
         description: the order's id
     responses:
@@ -149,8 +190,11 @@ tags:
         name: id
         schema: 
           type: string
+        example: 60d0a2972066325cf0c2e5d9    
         required: true
         description: the order's id
+    requestBody:
+      $ref: '#/components/requestBody/OrderReqBody'    
     responses:
       200:
         description: the customer is authorized and the order infomation is updated 
