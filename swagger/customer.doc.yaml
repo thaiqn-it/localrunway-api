@@ -25,9 +25,6 @@ components:
         password:
           type: string
           description: Password to login of customer
-        token:
-          type: string
-          description: Token of 3 party
         name:
           type: string
           description: The name of customer
@@ -60,6 +57,12 @@ components:
         bust:
           type: number
           description: The customer's bust number
+        fb_userId:
+          type: string
+          description: The facebook userId of customer
+        firstBoughtBrandIds:
+          type: string
+          description: The First bought brand id of customer   
   response:
     customerProfile:
       type: object
@@ -149,6 +152,109 @@ tags:
                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcklkIjoiNjBhZTU5YzgxYmNhOTQ1ZmY0YjUzMWU5IiwiaWF0IjoxNjIzNDIyNDI4fQ.JlN18-raoWUZP_aKZ427PW0SxLJxPRCmhEqg3BSJYPU  
       500:
         description: bad request
-
-
-
+/api/customers/fbLogin:
+  post:
+    summary: "Login by Facebook token"
+    tags: [Customer]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              accessToken:
+                type: string 
+    responses:
+      200:
+        description: login succses and return the JWT auth token
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcklkIjoiNjBhZTU5YzgxYmNhOTQ1ZmY0YjUzMWU5IiwiaWF0IjoxNjIzNDIyNDI4fQ.JlN18-raoWUZP_aKZ427PW0SxLJxPRCmhEqg3BSJYPU  
+      500:
+        description: bad request
+/api/customers/register:
+  post:
+    summary: "Registration"
+    tags: [Customer]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
+              hobby:
+                type: string
+              job:
+                type: string
+              waist:
+                type: number
+              hip:  
+                type: number
+              bust:
+                type: number
+              name: 
+                type: string
+              fb_userId:
+                type: string
+              status:
+                type: string  
+              gender:
+                type: string
+              height:
+                type: string
+              weight:
+                type: string
+              firstBoughtBrandIds:  
+                type: array    
+            example:
+              phoneNumber: "0937287333"
+              email: sample@gmail.com
+              password: tinhbandieuky
+              hobby: football
+              job: Student
+              waist: 90
+              bust: 90
+              hip: 90
+              name: Dinh Phu Cuong
+              fb_userId: 
+              status: "ACTIVE"
+              gender: "MALE"
+              height: 170
+              weight: 60
+              firstBoughtBrandIds: []     
+    responses:
+      200:
+        description: Register succses and return the JWT auth token
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer:
+                    $ref: '#/components/schemas/Customer'
+      500:
+        description: bad request
+      400:
+        description: validation error
+        content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+              errorParams:
+                type: object

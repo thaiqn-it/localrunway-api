@@ -276,6 +276,14 @@ paths:
           in: query 
           type: "string"
           description: pagination tracking query string 
+        - name: brandIds 
+          in: query 
+          type: "string"
+          description: brandId of the product
+        - name: prices 
+          in: query 
+          type: number
+          description: the price range of the product      
       responses:
         200:
           description: get product by conditions

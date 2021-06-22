@@ -46,14 +46,22 @@ tags:
        content:
         application/json:
             schema:
-             $ref: '#/components/schemas/Hashtag'
+              type: object
+              properties: 
+                name:
+                  type: string
+              example:
+                name: thoi thuong    
     responses:
       200:
         description: the inserted hashtag
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Hashtag'
+              type: object
+              properties:
+                hashtag:
+                  $ref: '#/components/schemas/Hashtag'
       500:
         description: bad request            
 /api/hashtags/{id}:
@@ -65,6 +73,7 @@ tags:
         name: id
         schema:
           type: string
+        example: 60ae616c056bb60d1873e8d5  
         required: true
         description: The hashtag's id
     responses:
@@ -73,7 +82,10 @@ tags:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Hashtag'
+              type: object
+              properties:
+                hashtag:
+                  $ref: '#/components/schemas/Hashtag'
       404:
         description: the hashtag is not found
   put:
@@ -85,20 +97,29 @@ tags:
         schema:
           type: string
         required: true
+        example: 60ae616c056bb60d1873e8d5
         description: The hashtag id
     requestBody:
        required: true
        content:
         application/json:
           schema:
-              $ref: '#/components/schemas/Hashtag'
+              type: object
+              properties: 
+                name:
+                  type: string
+              example:
+                name: thoi thuong    
     responses:
       200:
         description: the updated Hashtag
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Hashtag'
+            type: object
+            properties:
+              hashtag:
+                $ref: '#/components/schemas/Hashtag'
       500:
         description: bad request 
   delete:
@@ -109,6 +130,7 @@ tags:
         name: id
         schema:
           type: string
+        example: 60ae616c056bb60d1873e8d5  
         required: true
         description: The hashtag id
     responses:
@@ -117,7 +139,10 @@ tags:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Hashtag'
+            type: object
+            properties:
+              hashtag:
+                $ref: '#/components/schemas/Hashtag'
      500:
       description: bad request        
       

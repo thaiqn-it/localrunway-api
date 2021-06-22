@@ -12,10 +12,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  $ref: "#/definitions/Payment"
+                type: object
+                properties:
+                  payments:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Payment'
         401:
           description: Unauthorized users
 definitions:
@@ -31,3 +33,18 @@ definitions:
         description: Name of the payment
     xml:
       name: "Payment"
+components:
+  schemas:
+    Payment:
+      type: string
+      properties:
+        id:
+          type: "string"
+          fommat: uuid
+          description: The auto generate id of payment
+        paymentMethod:
+          type: string
+          description: Name of the payment    
+      example:
+        id: 60ae5b0e1bca945ff4b53229
+        paymentMethod: "Visa"

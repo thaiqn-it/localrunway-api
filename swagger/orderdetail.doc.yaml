@@ -74,15 +74,16 @@ tags:
         content:
           application/json:
             schema:
-              $ref : '#/components/schemas/OrderDetails'
+              type: object
+              properties:
+                OrderDetails:
+                  $ref : '#/components/schemas/OrderDetails'
       500:
         description: Bad Request or Internal Server Error      
 /api/orders/{id}/orderdetails/{detailId}:
   get:
     tags: [OrderDetails]
     summary: the get orderdetails endpoint
-    security:
-      - customerAuth : []
     parameters:
       - in: path
         name: id
@@ -95,6 +96,7 @@ tags:
         name: detailId
         schema:
           type: string
+        example: 60d20a6b7c861d25644e6ca9  
         description: the id of the orderdetail
         required: true  
     responses:
@@ -103,6 +105,9 @@ tags:
         content:
           application/json:
             schema:
-              $ref : '#/components/schemas/OrderDetails'
+              type: object
+              properties:
+                OrderDetails:
+                  $ref : '#/components/schemas/OrderDetails'
       500:
         description: Bad Request or Internal Server Error    

@@ -40,6 +40,13 @@ components:
         logoUrl:
           type: string
           description: The logoUrl of Localbrand
+        createdAt:
+          type: string
+          description: the timestamp of Localbrand creation
+        updatedAt:
+          type: string
+          description: the laster update timestamp of th Localbrand    
+          
       example:
          name: 5TW
          address: 68/8 Trần Quang Khải, Q3, TP. Hồ Chí Minh
@@ -48,6 +55,8 @@ components:
          username:  cuong
          password: 1234
          logoUrl: logo-all-about-him-local-brand-viet-nam-streetwear-585x372.jpg (585×372) (localbrand.vn)
+         createdAt: '2021-06-16T15:39:09.912Z'
+         updatedAt: '2021-06-16T15:39:09.912Z'
   response:
     LocalbrandExcludePassword:
       type: object
@@ -78,6 +87,12 @@ components:
         logoUrl:
           type: string
           description: The logoUrl of Localbrand
+        createdAt:
+          type: string
+          description: the timestamp of Localbrand creation
+        updatedAt:
+          type: string
+          description: the laster update timestamp of th Localbrand   
       example:
          name: 5TW
          address: 68/8 Trần Quang Khải, Q3, TP. Hồ Chí Minh
@@ -86,6 +101,8 @@ components:
          username:  cuong
          status: ACTIVE
          logoUrl: logo-all-about-him-local-brand-viet-nam-streetwear-585x372.jpg (585×372) (localbrand.vn)
+         createdAt: '2021-06-16T15:39:09.912Z'
+         updatedAt: '2021-06-16T15:39:09.912Z'
 tags:
   name: Localbrand
   description: The Localbrand Management Apis 
@@ -99,9 +116,12 @@ tags:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/response/LocalbrandExcludePassword'
+            type: object
+            properties:
+              localBrands:
+                type: array
+                items:
+                  $ref: '#/components/response/LocalbrandExcludePassword'
      404:
       description: Not found
   post:
@@ -121,7 +141,7 @@ tags:
           schema:
             type: object
             properties:
-              localband:
+              localbrand:
                 $ref: '#/components/response/LocalbrandExcludePassword'
      500:
       description: bad request
@@ -138,13 +158,13 @@ tags:
         description: The hashtag's id
     responses:
       200:
-        description: the localband
+        description: the localbrand
         content:
           application/json:
             schema:
               type: object
               properties:
-                localband:
+                localbrand:
                   $ref: '#/components/response/LocalbrandExcludePassword'
       404:
         description: the localbrand is not found      
@@ -172,7 +192,7 @@ tags:
             schema:
               type: object
               properties:
-                localband:
+                localbrand:
                   $ref: '#/components/schemas/Localbrand'
       500:
         description: bad request
@@ -194,7 +214,55 @@ tags:
             schema:
               type: object
               properties:
-                localband:
+                localbrand:
                   $ref: '#/components/schemas/Localbrand'
       500:
         description: bad request      
+/api/localbrands/login:
+  post:
+    summary: "Login as a localbrand"
+    tags: [Localbrand]
+    requestBody:
+      required: true
+      content:
+        application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              example:
+                username: testUser
+                password: tinhbandieuki      
+    responses:
+     200:
+      description: the JWT of localbrand 
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+     500:
+      description: bad request
+/api/localbrands/me:
+  get:
+    summary: "Get localbrand info by JWT token"
+    tags: [Localbrand]
+    security: 
+      - localbrandAuth: []
+    responses:
+     200:
+      description: the JWT of localbrand 
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              localbrand:
+                $ref: '#/components/response/LocalbrandExcludePassword'
+     500:
+      description: bad request                
