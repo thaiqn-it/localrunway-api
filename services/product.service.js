@@ -1,3 +1,4 @@
+const { PRODUCT_TYPE } = require("../models/enum");
 const { productMediaService } = require("./productmedia.service");
 const { PRODUCT_STATUS } = require("../models/enum");
 const { hashtagService } = require("./hashtag.service");
@@ -22,19 +23,25 @@ const getById = async (id, { populates = [], ...options } = {}) => {
 	}
 	product = await product;
 	if (product === null) return Promise.reject();
+	if (product.parentId) {
+		const parentProduct = await Product.findById(product.parentId).populate(
+			"media"
+		);
+		product._doc.media = parentProduct.media;
+	}
 	const hashtags = await hashtagService.getAllByProductId(product.id);
 	return {
 		...product._doc,
 		category: product.category,
-		media: product.media,
 		localbrand: product.localbrand,
+		media: product._doc.media ?? product.media,
 		hashtags,
 	};
 };
 
 const search = async ({ ...params }) => {
 	const PAGE_LIMIT = 5;
-	const { categoryId, sort, queryValue, sizes, page, brandIds, prices } =
+	const { categoryId, sort, queryValue, sizes, page, brandIds, prices, type } =
 		params;
 	let q = {};
 	let s = {};
@@ -92,6 +99,12 @@ const search = async ({ ...params }) => {
 			brandId: {
 				$in: brandIds,
 			},
+		};
+	}
+	if (Object.values(PRODUCT_TYPE).includes(type)) {
+		q = {
+			...q,
+			type,
 		};
 	}
 	if (Array.isArray(prices) && prices.length === 2) {

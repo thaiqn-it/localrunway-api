@@ -89,7 +89,7 @@ router.delete("/:id/hashtags/:hashtagId", async (req, res, next) => {
 });
 
 router.get("/", async (req, res, next) => {
-	const { categoryId, sort, queryValue, sizes, page, brandIds, prices } =
+	const { categoryId, sort, queryValue, sizes, page, brandIds, prices, type } =
 		req.query;
 	try {
 		let data = await productService.search({
@@ -100,6 +100,7 @@ router.get("/", async (req, res, next) => {
 			page,
 			brandIds,
 			prices,
+			type,
 		});
 		return res.json(data);
 	} catch (err) {
@@ -197,6 +198,7 @@ router.put(
 			const product = await productService.updateById(id, data);
 			return res.json({ product });
 		} catch (err) {
+			console.log(err);
 			return res
 				.status(INTERNAL_SERVER_ERROR)
 				.json(restError.INTERNAL_SERVER_ERROR.default());

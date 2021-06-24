@@ -11,7 +11,7 @@ const productMediaSchema = new mongoose.Schema({
 	},
 	rank: {
 		type: Number,
-		required: true,
+		default: 1,
 	},
 });
 
