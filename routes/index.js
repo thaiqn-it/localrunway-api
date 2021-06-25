@@ -1,4 +1,5 @@
 const express = require("express");
+const { mediaRouter } = require("./media.route");
 const { orderRouter } = require("./order.route");
 const { productRouter } = require("./product.route");
 const { localBrandRouter } = require("./localbrand.route");
@@ -16,6 +17,7 @@ router.use("/hashtags", hashtagRouter);
 router.use("/localbrands", localBrandRouter);
 router.use("/products", productRouter);
 router.use("/orders", orderRouter);
+router.use("/media", mediaRouter);
 
 router.get("/", async (req, res) => {
 	res.json({

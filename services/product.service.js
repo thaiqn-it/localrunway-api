@@ -28,15 +28,16 @@ const getById = async (id, { populates = [], ...options } = {}) => {
 			"media"
 		);
 		product._doc.media = parentProduct.media;
+		product._doc.hashtags = await hashtagService.getAllByProductId(
+			parentProduct.id
+		);
 	}
-	const hashtags = await hashtagService.getAllByProductId(product.id);
 	return {
 		...product._doc,
 		category: product.category,
 		localbrand: product.localbrand,
 		media: product._doc.media ?? product.media,
 		rating: product.rating,
-		hashtags,
 	};
 };
 
@@ -133,7 +134,11 @@ const search = async ({ ...params }) => {
 
 	for (let product of data.products) {
 		product._doc.brandName = product.localbrand.name;
-		product._doc.hashtags = await hashtagService.getAllByProductId(product.id);
+		if (product.parentId) {
+			product._doc.hashtags = await hashtagService.getAllByProductId(
+				product.parentId
+			);
+		}
 		product._doc.rating = product.rating;
 	}
 
