@@ -57,6 +57,14 @@ const productSchema = new mongoose.Schema(
 			required: true,
 			enum: Object.values(PRODUCT_TYPE),
 		},
+		ratingTotal: {
+			type: Number,
+			default: 0,
+		},
+		ratingCount: {
+			type: Number,
+			default: 1,
+		},
 	},
 	{
 		timestamps: true,
@@ -66,6 +74,10 @@ const productSchema = new mongoose.Schema(
 		},
 	}
 );
+
+productSchema.virtual("rating").get(function () {
+	return Math.round(((this.ratingTotal * 1.0) / this.ratingCount) * 10) / 10;
+});
 
 productSchema.virtual("category", {
 	ref: "Category",

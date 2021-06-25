@@ -35,6 +35,7 @@ const getById = async (id, { populates = [], ...options } = {}) => {
 		category: product.category,
 		localbrand: product.localbrand,
 		media: product._doc.media ?? product.media,
+		rating: product.rating,
 		hashtags,
 	};
 };
@@ -133,6 +134,7 @@ const search = async ({ ...params }) => {
 	for (let product of data.products) {
 		product._doc.brandName = product.localbrand.name;
 		product._doc.hashtags = await hashtagService.getAllByProductId(product.id);
+		product._doc.rating = product.rating;
 	}
 
 	return data;
