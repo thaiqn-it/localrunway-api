@@ -146,6 +146,14 @@ const search = async ({ ...params }) => {
 };
 
 const deleteById = async (id) => {
+	const products = await Product.find({
+		parentId: id,
+	});
+	for (let product of products) {
+		await Product.findByIdAndUpdate(product.id, {
+			status: PRODUCT_STATUS.INACTIVE,
+		});
+	}
 	return await Product.findByIdAndUpdate(
 		id,
 		{
