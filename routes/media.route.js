@@ -4,13 +4,31 @@ const { firebaseBucket } = require("../utils/firebaseAdmin");
 const { restError } = require("../errors/rest");
 const { INTERNAL_SERVER_ERROR } = require("http-status");
 
+const MAX_FILE_SIZE_BYTES = 4 * 1024 * 1024;
+
 const upload = multer({
 	storage: multer.memoryStorage(),
+	limits: {
+		fileSize: MAX_FILE_SIZE_BYTES,
+	},
 });
 const router = express.Router();
 router.use(express.urlencoded({ extended: false }));
 
-router.post("/upload", upload.single("file"), async (req, res, next) => {
+const uploadMiddleware = (req, res, next) => {
+	upload.single("file")(req, res, (err) => {
+		if (err) {
+			return res.status(INTERNAL_SERVER_ERROR).json(
+				restError.INTERNAL_SERVER_ERROR.extra({
+					fileSizeLimit: "4MB",
+				})
+			);
+		}
+		next();
+	});
+};
+
+router.post("/upload", uploadMiddleware, async (req, res, next) => {
 	try {
 		if (!req.file) throw new Error();
 		const originalFilename = req.file.originalname;
