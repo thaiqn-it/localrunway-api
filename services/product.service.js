@@ -95,7 +95,7 @@ const search = async ({ ...params }) => {
 				name: 1,
 			};
 		}
-		if (s === "-name") {
+		if (sort === "-name") {
 			s = {
 				...s,
 				name: -1,
@@ -155,6 +155,14 @@ const search = async ({ ...params }) => {
 			);
 		}
 		product._doc.rating = product.rating;
+	}
+
+	if (sort === "-rating") {
+		data.products.sort((x, y) => y.rating - x.rating);
+	}
+
+	if (sort === "+rating") {
+		data.products.sort((x, y) => x.rating - y.rating);
 	}
 
 	return data;
