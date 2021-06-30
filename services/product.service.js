@@ -43,8 +43,17 @@ const getById = async (id, { populates = [], ...options } = {}) => {
 
 const search = async ({ ...params }) => {
 	const PAGE_LIMIT = 5;
-	const { categoryId, sort, queryValue, sizes, page, brandIds, prices, type } =
-		params;
+	const {
+		categoryId,
+		parentId,
+		sort,
+		queryValue,
+		sizes,
+		page,
+		brandIds,
+		prices,
+		type,
+	} = params;
 	let q = {};
 	let s = {};
 	if (categoryId) {
@@ -59,6 +68,12 @@ const search = async ({ ...params }) => {
 			$text: {
 				$search: queryValue,
 			},
+		};
+	}
+	if (parentId) {
+		q = {
+			...q,
+			parentId,
 		};
 	}
 	if (sort) {
