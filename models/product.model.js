@@ -65,6 +65,10 @@ const productSchema = new mongoose.Schema(
 			type: Number,
 			default: 1,
 		},
+		bulkSearch: {
+			type: String,
+			default: "",
+		},
 	},
 	{
 		timestamps: true,
@@ -105,7 +109,7 @@ productSchema.virtual("producthashtags", {
 	foreignField: "productId",
 });
 
-productSchema.index({ name: "text", color: "text" });
+productSchema.index({ name: "text", color: "text", bulkSearch: "text" });
 
 productSchema.plugin(mongoosePaginate);
 

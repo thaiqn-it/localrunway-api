@@ -8,6 +8,23 @@ const { Product } = require("../models/product.model");
 const { Category } = require("../models/category.model");
 
 const getById = async (id, { populates = [], ...options } = {}) => {
+	// const products = await Product.find({}).populate("localbrand");
+	// for (let product of products) {
+	// 	let arr = [];
+	// 	let hashtags = await hashtagService.getAllByProductId(product.id);
+	// 	if (product.parentId) {
+	// 		hashtags = await hashtagService.getAllByProductId(product.parentId);
+	// 	}
+	// 	for (let hashtag of hashtags) {
+	// 		arr.push(hashtag.name);
+	// 	}
+	// 	arr.push(product.localbrand.name);
+	// 	const bulkSearch = arr.join(" ");
+	// 	await Product.findByIdAndUpdate(product.id, {
+	// 		bulkSearch,
+	// 	});
+	// }
+	// return;
 	let product = Product.findOne({ _id: id });
 	if (populates.includes("all")) {
 		populates = ["category", "localbrand", "media"];
