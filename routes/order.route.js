@@ -81,7 +81,7 @@ router.post(
 			if (!customerId) throw new Error();
 			const data = { ...req.body, customerId };
 			const order = await orderService.createOne(data);
-			return res.json({ order });
+			return res.json({ order: await orderService.getById(order.id) });
 		} catch (err) {
 			res
 				.status(INTERNAL_SERVER_ERROR)
@@ -96,16 +96,23 @@ router.get("/:id", customer_auth, async (req, res, next) => {
 		const customerId = req.customer.id;
 		const order = await orderService.getByIdAndCustomerId(id, customerId);
 		if (order === null) throw new Error();
-		const brand = await localBrandService.getById(order.brandId);
-		const payment = await paymentService.getById(order.paymentId);
 		return res.json({
 			order: {
 				...order,
-				localbrand: brand,
-				payment: payment,
-				total: await orderService.getTotalMoney(id),
 				details: await orderDetailService.getByOrderId(id),
 			},
+		});
+	} catch (err) {
+		return res.status(NOT_FOUND).json(restError.NOT_FOUND.default());
+	}
+});
+
+router.get("/", customer_auth, async (req, res, next) => {
+	try {
+		const customerId = req.customer.id;
+		const orders = await orderService.getAllByCustomerId(customerId);
+		return res.json({
+			orders,
 		});
 	} catch (err) {
 		return res.status(NOT_FOUND).json(restError.NOT_FOUND.default());
