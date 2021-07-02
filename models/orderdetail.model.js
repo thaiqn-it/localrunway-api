@@ -41,6 +41,10 @@ orderDetailSchema.virtual("product", {
 	justOne: true,
 });
 
+orderDetailSchema.virtual("unitTotal").get(function () {
+	return this.unitPrice * this.quantity;
+});
+
 const OrderDetail = mongoose.model("OrderDetail", orderDetailSchema);
 
 module.exports = { OrderDetail };

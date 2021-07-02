@@ -14,7 +14,12 @@ const getByIdAndOrderId = async (id, orderId) => {
 	};
 };
 
+const getByOrderId = async (orderId) => {
+	return await OrderDetail.find({orderId})
+}
+
 exports.orderDetailService = {
 	createOne,
+	getByOrderId,
 	getByIdAndOrderId,
 };

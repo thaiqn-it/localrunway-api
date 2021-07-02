@@ -54,6 +54,7 @@ router.post(
 		body("paymentId")
 			.notEmpty()
 			.withMessage("Payment should not be empty")
+			.bail()
 			.custom(isPaymentExist)
 			.withMessage(`Payment should be existed`),
 		body("address")
@@ -102,6 +103,8 @@ router.get("/:id", customer_auth, async (req, res, next) => {
 				...order,
 				localbrand: brand,
 				payment: payment,
+				total: await orderService.getTotalMoney(id),
+				details: await orderDetailService.getByOrderId(id),
 			},
 		});
 	} catch (err) {

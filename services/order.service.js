@@ -1,3 +1,4 @@
+const { orderDetailService } = require("./orderdetail.service");
 const { Order } = require("../models/order.model");
 
 const createOne = async ({ ...data }) => {
@@ -19,9 +20,19 @@ const updateOne = async (id, data) => {
 	return await Order.findByIdAndUpdate(id, data, { new: true });
 };
 
+const getTotalMoney = async (orderId) => {
+	const details = await orderDetailService.getByOrderId(orderId);
+	let total = 0;
+	for (let detail of details) {
+		total += detail.unitTotal;
+	}
+	return total;
+};
+
 exports.orderService = {
 	createOne,
 	getById,
 	getByIdAndCustomerId,
 	updateOne,
+	getTotalMoney,
 };
