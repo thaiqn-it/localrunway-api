@@ -55,6 +55,7 @@ const getById = async (id, { populates = [], ...options } = {}) => {
 		localbrand: product.localbrand,
 		media: product._doc.media ?? product.media,
 		rating: product.rating,
+		unpackedSizeSpecs: product.unpackedSizeSpecs,
 	};
 };
 
@@ -170,6 +171,7 @@ const search = async ({ ...params }) => {
 			product._doc.hashtags = await hashtagService.getAllByProductId(
 				product.parentId
 			);
+			product._doc.unpackedSizeSpecs = product.unpackedSizeSpecs;
 		}
 		product._doc.rating = product.rating;
 	}

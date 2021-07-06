@@ -44,3 +44,28 @@ exports.validateVNPhoneNumber = (value) => {
 	}
 	return Promise.resolve();
 };
+
+exports.unpackSizeSpecs = (
+	specs,
+	fields = ["weight", "height", "bust", "waist", "hip"]
+) => {
+	let ret = {};
+	try {
+		if (!specs || typeof specs !== "string") return ret;
+		const items = specs.split(";");
+		for (let item of items) {
+			const spec = item.split(":");
+			if (spec.length === 3 && fields.includes(spec[0])) {
+				let mn = parseInt(spec[1]);
+				let mx = parseInt(spec[2]);
+				ret[spec[0]] = {
+					min: mn,
+					max: mx,
+				};
+			}
+		}
+	} catch (err) {
+		return ret;
+	}
+	return ret;
+};

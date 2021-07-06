@@ -3,6 +3,7 @@ const { PRODUCT_TYPE } = require("./enum");
 const { PRODUCT_STATUS } = require("./enum");
 const { Category } = require("./category.model");
 const mongoosePaginate = require("mongoose-paginate-v2");
+const { unpackSizeSpecs } = require("../utils");
 
 const productSchema = new mongoose.Schema(
 	{
@@ -69,6 +70,10 @@ const productSchema = new mongoose.Schema(
 			type: String,
 			default: "",
 		},
+		sizeSpecs: {
+			type: String,
+			default: "",
+		},
 	},
 	{
 		timestamps: true,
@@ -88,6 +93,10 @@ productSchema.virtual("category", {
 	localField: "categoryId",
 	foreignField: "_id",
 	justOne: true,
+});
+
+productSchema.virtual("unpackedSizeSpecs").get(function () {
+	return unpackSizeSpecs(this.sizeSpecs);
 });
 
 productSchema.virtual("localbrand", {
