@@ -174,7 +174,10 @@ tags:
           application/json:
             type: object
             schema:
-              $ref: '#/components/response/customerProfile'
+              type: object
+              properties:
+                customer:
+                    $ref: '#/components/response/customerProfile'
       400:
         description: Wrong Authentication
         content:

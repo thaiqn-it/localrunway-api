@@ -135,6 +135,25 @@ tags:
   name: Order
   description: The Order Management Apis
 /api/orders/:
+  get:
+    tags: [Order]
+    summary: the get all order of an customer api
+    security:
+      - customerAuth : []
+    responses:
+      200:
+        description: List of the order is return
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orders:
+                  type: array
+                  items:
+                    $ref : '#/components/schemas/Order'
+      500:
+        description: Bad Request or Internal Server Error  
   post:
     tags: [Order]
     summary: the insert order to Db api 

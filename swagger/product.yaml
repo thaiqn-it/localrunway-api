@@ -107,6 +107,10 @@ paths:
           type: "string"
           description: path parameter takes the product id
           required: true
+        - name: populates
+          in: query
+          type: array
+          description: query option  
       responses:
         '200':
           description: get product
@@ -283,7 +287,15 @@ paths:
         - name: prices 
           in: query 
           type: number
-          description: the price range of the product      
+          description: the price range of the product   
+        - name: type
+          in: query 
+          type: number
+          description: the type of the product
+        - name: parentId
+          in: query 
+          type: number
+          description: the parentId of the product           
       responses:
         200:
           description: get product by conditions
@@ -399,10 +411,18 @@ definitions: # Schema definition for the request body
         description: the size of the product
       type:
         type: string
-        enum:  ["GENERAL_PRODUCT" , "DETAIL_PRODUCT"]
+        enum:  ["GP" , "DP"]
         description: the type of the product
         required: true
-
+      thumbanailUrl:
+        type: string
+        description: the thumbanailUrl of the product
+      media:
+        type: array
+        items:
+          mediaURl:
+            type: string
+        description: the array contain the product's mediaUrl
 
       
 

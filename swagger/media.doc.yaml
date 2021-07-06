@@ -1,0 +1,34 @@
+tags:
+  name: Media
+  description: The Media Management Apis
+/api/media/upload: 
+  post:
+    summary: Upload image file
+    tags: [Media]
+    requestBody:
+      required: true
+      content:
+        multipart/form-data: 
+          schema:
+            type: object
+            properties:
+              file: 
+                type: string
+                format: binary
+    responses:
+      200:
+        description: delete succses
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fileName: 
+                  type: string
+                publicUrl:
+                  type: string  
+      400:
+        description: server error     
+      500:
+        description: bad request or fileSizeLimit                
+  
