@@ -121,6 +121,104 @@ tags:
                 type: string
             example:
               error: Wrong Authentication          
+  put:
+    security:
+      - customerAuth: []
+    summary: Update the customer's infomation
+    tags: [Customer]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+              hobby:
+                type: string
+              job:
+                type: string
+              waist:
+                type: number
+              hip:  
+                type: number
+              bust:
+                type: number
+              name: 
+                type: string
+              gender:
+                type: string
+              height:
+                type: string
+              weight:
+                type: string
+            example:
+              email: sample@gmail.com
+              password: tinhbandieuky
+              hobby: football
+              job: Student
+              waist: 90
+              bust: 90
+              hip: 90
+              name: Dinh Phu Cuong
+              gender: "MALE"
+              height: 170
+              weight: 60
+    responses:
+      200:
+        description: the customer's infomation
+        content:
+          application/json:
+            type: object
+            schema:
+              $ref: '#/components/response/customerProfile'
+      400:
+        description: Wrong Authentication
+        content:
+          application/json:
+            type: object
+            schema:
+              error:
+                type: string
+            example:
+              error: Wrong Authentication
+      500:
+        description: Data is not valid
+        content:
+          application/json:
+            type: object
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                errorParams:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                    hobby: 
+                      type: string
+                    waist:
+                      type: string
+                    hip: 
+                      type: string
+                    bust: 
+                      type: string
+                    name:
+                      type: string
+                    gender: 
+                      type: string
+                    height:
+                      type: string
+                    weight:
+                      type: string                      
+     
 /api/customers/login:
   post:
     summary: "Login"
