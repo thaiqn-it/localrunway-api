@@ -23,8 +23,13 @@ const createOne = async ({ firstBoughtBrandIds, ...data }) => {
 	return await new Customer(data).save();
 };
 
+const updateOne = async (id, { ...data }) => {
+	return await Customer.findByIdAndUpdate(id, data, { new: true });
+};
+
 exports.customerService = {
 	getOneByPhoneNumber,
 	getOne,
 	createOne,
+	updateOne,
 };

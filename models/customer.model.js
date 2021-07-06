@@ -9,7 +9,6 @@ const customerSchema = new mongoose.Schema({
 	},
 	email: {
 		type: String,
-		required: true,
 	},
 	password: {
 		type: String,
@@ -26,34 +25,40 @@ const customerSchema = new mongoose.Schema({
 	},
 	hobby: {
 		type: String,
+		default: "",
 	},
 	job: {
 		type: String,
+		default: "",
 	},
 	gender: {
 		type: String,
 		enum: Object.values(CUSTOMER_GENDER),
-		required: true,
+		default: CUSTOMER_GENDER.OTHER,
 	},
 	height: {
 		type: Number,
-		required: true,
+		default: 0,
 	},
 	weight: {
 		type: Number,
-		required: true,
+		default: 0,
 	},
 	waist: {
 		type: Number,
+		default: 0,
 	},
 	hip: {
 		type: Number,
+		default: 0,
 	},
 	bust: {
 		type: Number,
+		default: 0,
 	},
 	fb_userId: {
 		type: String,
+		default: "",
 	},
 	firstBoughtBrands: {
 		type: String,

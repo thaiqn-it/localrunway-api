@@ -25,6 +25,89 @@ router.get("/me", customer_auth, async (req, res) => {
 	});
 });
 
+router.put(
+	"/me",
+	customer_auth,
+	[
+		body("email")
+			.optional()
+			.normalizeEmail()
+			.isEmail()
+			.withMessage("Email wrong format"),
+		body("password")
+			.isLength({
+				min: 8,
+			})
+			.withMessage("Password should be at least 8 chars"),
+		body("hobby").optional(),
+		body("job").optional(),
+		body("waist").optional().isInt({ min: 0 }),
+		body("hip").optional().isInt({ min: 0 }),
+		body("bust").optional().isInt({ min: 0 }),
+		body("name").notEmpty().withMessage("Name should not be empty"),
+		body("gender")
+			.optional()
+			.isIn(Object.values(CUSTOMER_GENDER))
+			.withMessage(`Gender must be within ${Object.values(CUSTOMER_GENDER)}`),
+		body("height")
+			.optional()
+			.isInt({ min: 0 })
+			.withMessage("Height should be a positive number"),
+		body("weight")
+			.optional()
+			.isInt({ min: 0 })
+			.withMessage("Weight should be a positive number"),
+	],
+	async (req, res, next) => {
+		try {
+			const customerId = req.customer.id;
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				return res.status(BAD_REQUEST).json(
+					restError.BAD_REQUEST.extra({
+						errorParams: mapErrorArrayExpressValidator(errors.array()),
+					})
+				);
+			}
+			const {
+				email,
+				password,
+				hobby,
+				job,
+				bust,
+				waist,
+				hip,
+				name,
+				gender,
+				height,
+				weight,
+			} = req.body;
+			const data = {
+				email,
+				password,
+				hobby,
+				job,
+				bust,
+				waist,
+				hip,
+				name,
+				gender,
+				height,
+				weight,
+			};
+			const customer = await customerService.updateOne(customerId, {
+				...data,
+				password: hashPassword(data.password),
+			});
+			return res.json({
+				customer,
+			});
+		} catch (err) {
+			return res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
+		}
+	}
+);
+
 router.post("/login", async (req, res) => {
 	const { password, phoneNumber } = req.body;
 	try {
@@ -56,7 +139,7 @@ router.post("/fbLogin", async (req, res, next) => {
 		const customer = await customerService.getOne({
 			fb_userId,
 		});
-		if (customer === null) throw new Error();
+		if (customer === null || !customer.fb_userId) throw new Error();
 		const token = jwt.sign(
 			{
 				customerId: customer.id,
@@ -70,6 +153,18 @@ router.post("/fbLogin", async (req, res, next) => {
 		return res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
 	}
 });
+//
+// router.post("/fbRegister", async (req, res, next) => {
+// 	const { access_token } = req.body;
+// 	try {
+// 		const fbRes = await axios.get(
+// 			`https://graph.facebook.com/me?access_token=${access_token}&fields=id,name,`
+// 		);
+// 		const { id: fb_userId } = fbRes.data;
+// 	} catch (err) {
+// 		return res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
+// 	}
+// });
 
 router.post(
 	"/register",
@@ -90,7 +185,11 @@ router.post(
 				}
 				return Promise.resolve();
 			}),
-		body("email").isEmail().withMessage("Email wrong format"),
+		body("email")
+			.optional()
+			.normalizeEmail()
+			.isEmail()
+			.withMessage("Email wrong format"),
 		body("password")
 			.isLength({
 				min: 8,
@@ -104,18 +203,23 @@ router.post(
 		body("name").notEmpty().withMessage("Name should not be empty"),
 		body("fb_userId").optional(),
 		body("status")
+			.optional()
 			.isIn(Object.values(CUSTOMER_STATUS))
 			.withMessage(`Status must be within ${Object.values(CUSTOMER_STATUS)}`),
 		body("gender")
+			.optional()
 			.isIn(Object.values(CUSTOMER_GENDER))
 			.withMessage(`Gender must be within ${Object.values(CUSTOMER_GENDER)}`),
 		body("height")
+			.optional()
 			.isInt({ min: 0 })
 			.withMessage("Height should be a positive number"),
 		body("weight")
+			.optional()
 			.isInt({ min: 0 })
 			.withMessage("Weight should be a positive number"),
 		body("firstBoughtBrandIds")
+			.optional()
 			.isArray()
 			.withMessage(
 				"Bought brands should be included as an array of brands ids"
