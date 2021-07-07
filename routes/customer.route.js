@@ -100,7 +100,6 @@ router.put(
 			}
 			const {
 				email,
-				password,
 				hobby,
 				job,
 				bust,
@@ -113,7 +112,6 @@ router.put(
 			} = req.body;
 			const data = {
 				email,
-				password,
 				hobby,
 				job,
 				bust,
@@ -126,7 +124,6 @@ router.put(
 			};
 			const customer = await customerService.updateOne(customerId, {
 				...data,
-				password: hashPassword(data.password),
 			});
 			return res.json({
 				customer,
