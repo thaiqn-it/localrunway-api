@@ -13,6 +13,8 @@ const getById = async (id, { populates = [], ...options } = {}) => {
 	// const products = await Product.find({}).populate("localbrand");
 	// for (let product of products) {
 	// 	let arr = [];
+	// 	arr.push(product.name);
+	// 	arr.push(product.color);
 	// 	let hashtags = await hashtagService.getAllByProductId(product.id);
 	// 	if (product.parentId) {
 	// 		hashtags = await hashtagService.getAllByProductId(product.parentId);

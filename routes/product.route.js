@@ -112,7 +112,7 @@ router.get("/", async (req, res, next) => {
 			prices,
 			type,
 			parentId,
-			measurement: JSON.parse(measurement),
+			measurement: JSON.parse(measurement || "{}"),
 		});
 		return res.json(data);
 	} catch (err) {
