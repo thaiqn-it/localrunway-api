@@ -116,6 +116,7 @@ router.get("/", async (req, res, next) => {
 		});
 		return res.json(data);
 	} catch (err) {
+		console.log(err);
 		return res
 			.status(INTERNAL_SERVER_ERROR)
 			.send(restError.INTERNAL_SERVER_ERROR.default());
