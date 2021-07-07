@@ -9,46 +9,50 @@ const { excludeFields } = require("../utils");
 const { Product } = require("../models/product.model");
 const { Category } = require("../models/category.model");
 
+const indexingBulkSearch = async (id) => {
+	let product = await Product.findById(id);
+	let arr = [];
+	arr.push(product.name);
+	arr.push(product.color);
+	let hashtags = await hashtagService.getAllByProductId(product.id);
+	if (product.parentId) {
+		hashtags = await hashtagService.getAllByProductId(product.parentId);
+	}
+	for (let hashtag of hashtags) {
+		arr.push(hashtag.name);
+	}
+	arr.push(product.localbrand.name);
+	const bulkSearch = arr.join(" ");
+	product = await Product.findByIdAndUpdate(
+		product.id,
+		{
+			bulkSearch,
+		},
+		{ new: true }
+	);
+	return product;
+};
+
+const unpackSizeSpecsForProduct = async (id) => {
+	const product = await Product.findById(id);
+	if (product.type === "DP") {
+		const unpacked = unpackSizeSpecs(product.sizeSpecs);
+		for (let prop in unpacked) {
+			const { min, max } = unpacked[prop];
+			const minProp =
+				"min" + prop.charAt(0).toUpperCase() + prop.substr(1).toLowerCase();
+			const maxProp =
+				"max" + prop.charAt(0).toUpperCase() + prop.substr(1).toLowerCase();
+			await Product.findByIdAndUpdate(product.id, {
+				[minProp]: min,
+				[maxProp]: max,
+			});
+		}
+	}
+	return await Product.findById(id);
+};
+
 const getById = async (id, { populates = [], ...options } = {}) => {
-	// const products = await Product.find({}).populate("localbrand");
-	// for (let product of products) {
-	// 	let arr = [];
-	// 	arr.push(product.name);
-	// 	arr.push(product.color);
-	// 	let hashtags = await hashtagService.getAllByProductId(product.id);
-	// 	if (product.parentId) {
-	// 		hashtags = await hashtagService.getAllByProductId(product.parentId);
-	// 	}
-	// 	for (let hashtag of hashtags) {
-	// 		arr.push(hashtag.name);
-	// 	}
-	// 	arr.push(product.localbrand.name);
-	// 	const bulkSearch = arr.join(" ");
-	// 	await Product.findByIdAndUpdate(product.id, {
-	// 		bulkSearch,
-	// 	});
-	// }
-	// return;
-	//
-	// const products = await Product.find({});
-	// for (let product of products) {
-	// 	if (product.type === "DP") {
-	// 		const unpacked = unpackSizeSpecs(product.sizeSpecs);
-	// 		for (let prop in unpacked) {
-	// 			const { min, max } = unpacked[prop];
-	// 			const minProp =
-	// 				"min" + prop.charAt(0).toUpperCase() + prop.substr(1).toLowerCase();
-	// 			const maxProp =
-	// 				"max" + prop.charAt(0).toUpperCase() + prop.substr(1).toLowerCase();
-	// 			await Product.findByIdAndUpdate(product.id, {
-	// 				[minProp]: min,
-	// 				[maxProp]: max,
-	// 			});
-	// 		}
-	// 	}
-	// }
-	//
-	// return;
 	let product = Product.findOne({ _id: id });
 	if (populates.includes("all")) {
 		populates = ["category", "localbrand", "media"];
@@ -321,4 +325,6 @@ exports.productService = {
 	updateById,
 	addProductHashtag,
 	deleteProductHashtag,
+	indexingBulkSearch,
+	unpackSizeSpecsForProduct,
 };

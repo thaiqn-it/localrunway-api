@@ -166,7 +166,8 @@ router.post(
 			);
 		}
 		try {
-			const product = await productService.createOne(data);
+			let product = await productService.createOne(data);
+			product = await productService.indexingBulkSearch(product.id);
 			return res.json({ product });
 		} catch (err) {
 			return res
@@ -208,7 +209,8 @@ router.put(
 			);
 		}
 		try {
-			const product = await productService.updateById(id, data);
+			let product = await productService.updateById(id, data);
+			product = await productService.indexingBulkSearch(product.id);
 			return res.json({ product });
 		} catch (err) {
 			console.log(err);
