@@ -99,6 +99,7 @@ router.get("/", async (req, res, next) => {
 		prices,
 		type,
 		parentId,
+		measurement,
 	} = req.query;
 	try {
 		let data = await productService.search({
@@ -111,6 +112,7 @@ router.get("/", async (req, res, next) => {
 			prices,
 			type,
 			parentId,
+			measurement: JSON.parse(measurement),
 		});
 		return res.json(data);
 	} catch (err) {

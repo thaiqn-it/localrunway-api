@@ -3,6 +3,7 @@ const { PRODUCT_TYPE } = require("./enum");
 const { PRODUCT_STATUS } = require("./enum");
 const { Category } = require("./category.model");
 const mongoosePaginate = require("mongoose-paginate-v2");
+const { SIZE_SPECS } = require("./enum");
 const { unpackSizeSpecs } = require("../utils");
 
 const productSchema = new mongoose.Schema(
@@ -73,6 +74,46 @@ const productSchema = new mongoose.Schema(
 		sizeSpecs: {
 			type: String,
 			default: "",
+		},
+		minWeight: {
+			type: Number,
+			default: SIZE_SPECS.WEIGHT_MIN,
+		},
+		maxWeight: {
+			type: Number,
+			default: SIZE_SPECS.WEIGHT_MAX,
+		},
+		minHeight: {
+			type: Number,
+			default: SIZE_SPECS.HEIGHT_MIN,
+		},
+		maxHeight: {
+			type: Number,
+			default: SIZE_SPECS.HEIGHT_MAX,
+		},
+		minBust: {
+			type: Number,
+			default: SIZE_SPECS.BUST_MIN,
+		},
+		maxBust: {
+			type: Number,
+			default: SIZE_SPECS.BUST_MAX,
+		},
+		minWaist: {
+			type: Number,
+			default: SIZE_SPECS.WAIST_MIN,
+		},
+		maxWaist: {
+			type: Number,
+			default: SIZE_SPECS.WAIST_MAX,
+		},
+		minHip: {
+			type: Number,
+			default: SIZE_SPECS.HIP_MIN,
+		},
+		maxHip: {
+			type: Number,
+			default: SIZE_SPECS.HIP_MAX,
 		},
 	},
 	{

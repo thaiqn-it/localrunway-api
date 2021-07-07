@@ -1,3 +1,5 @@
+const { SIZE_SPECS } = require("../models/enum");
+const { unpackSizeSpecs } = require("../utils");
 const { PRODUCT_TYPE } = require("../models/enum");
 const { productMediaService } = require("./productmedia.service");
 const { PRODUCT_STATUS } = require("../models/enum");
@@ -24,6 +26,26 @@ const getById = async (id, { populates = [], ...options } = {}) => {
 	// 		bulkSearch,
 	// 	});
 	// }
+	// return;
+	//
+	// const products = await Product.find({});
+	// for (let product of products) {
+	// 	if (product.type === "DP") {
+	// 		const unpacked = unpackSizeSpecs(product.sizeSpecs);
+	// 		for (let prop in unpacked) {
+	// 			const { min, max } = unpacked[prop];
+	// 			const minProp =
+	// 				"min" + prop.charAt(0).toUpperCase() + prop.substr(1).toLowerCase();
+	// 			const maxProp =
+	// 				"max" + prop.charAt(0).toUpperCase() + prop.substr(1).toLowerCase();
+	// 			await Product.findByIdAndUpdate(product.id, {
+	// 				[minProp]: min,
+	// 				[maxProp]: max,
+	// 			});
+	// 		}
+	// 	}
+	// }
+	//
 	// return;
 	let product = Product.findOne({ _id: id });
 	if (populates.includes("all")) {
@@ -55,7 +77,6 @@ const getById = async (id, { populates = [], ...options } = {}) => {
 		localbrand: product.localbrand,
 		media: product._doc.media ?? product.media,
 		rating: product.rating,
-		unpackedSizeSpecs: product.unpackedSizeSpecs,
 	};
 };
 
@@ -71,6 +92,7 @@ const search = async ({ ...params }) => {
 		brandIds,
 		prices,
 		type,
+		measurement,
 	} = params;
 	let q = {};
 	let s = {};
@@ -142,6 +164,63 @@ const search = async ({ ...params }) => {
 			type,
 		};
 	}
+	if (measurement) {
+		if (measurement.weight) {
+			q = {
+				...q,
+				minWeight: {
+					$lte: measurement.weight + SIZE_SPECS.WEIGHT_DELTA,
+				},
+				maxWeight: {
+					$gte: measurement.weight - SIZE_SPECS.WEIGHT_DELTA,
+				},
+			};
+		}
+		if (measurement.height) {
+			q = {
+				...q,
+				minHeight: {
+					$lte: measurement.height + SIZE_SPECS.HEIGHT_DELTA,
+				},
+				maxHeight: {
+					$gte: measurement.height - SIZE_SPECS.HEIGHT_DELTA,
+				},
+			};
+		}
+		if (measurement.bust) {
+			q = {
+				...q,
+				minBust: {
+					$lte: measurement.bust + SIZE_SPECS.BUST_DELTA,
+				},
+				maxBust: {
+					$gte: measurement.bust - SIZE_SPECS.BUST_DELTA,
+				},
+			};
+		}
+		if (measurement.waist) {
+			q = {
+				...q,
+				minWaist: {
+					$lte: measurement.waist + SIZE_SPECS.WAIST_DELTA,
+				},
+				maxWaist: {
+					$gte: measurement.waist - SIZE_SPECS.WAIST_DELTA,
+				},
+			};
+		}
+		if (measurement.hip) {
+			q = {
+				...q,
+				minHip: {
+					$lte: measurement.hip + SIZE_SPECS.HIP_DELTA,
+				},
+				maxHip: {
+					$gte: measurement.hip - SIZE_SPECS.HIP_DELTA,
+				},
+			};
+		}
+	}
 	if (Array.isArray(prices) && prices.length === 2) {
 		const [minPrice, maxPrice] = prices.map((x) => parseInt(x));
 		if (minPrice < maxPrice) {
@@ -171,7 +250,6 @@ const search = async ({ ...params }) => {
 			product._doc.hashtags = await hashtagService.getAllByProductId(
 				product.parentId
 			);
-			product._doc.unpackedSizeSpecs = product.unpackedSizeSpecs;
 		}
 		product._doc.rating = product.rating;
 	}
