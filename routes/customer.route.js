@@ -26,6 +26,40 @@ router.get("/me", customer_auth, async (req, res) => {
 });
 
 router.put(
+	"/resetPassword",
+	customer_auth,
+	[
+		body("password").isLength({ min: 8 }),
+		body("newPassword").isLength({ min: 8 }),
+	],
+	async (req, res, next) => {
+		try {
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				return res.status(BAD_REQUEST).json(
+					restError.BAD_REQUEST.extra({
+						errorParams: mapErrorArrayExpressValidator(errors.array()),
+					})
+				);
+			}
+			let customer = await customerService.getOne({
+				_id: req.customer.id,
+			});
+			const { password, newPassword } = req.body;
+			if (!comparePassword(password, customer.password)) throw new Error();
+			customer = await customerService.updateOne(customer.id, {
+				password: hashPassword(newPassword),
+			});
+			return res.json({
+				customer: excludePassword(customer),
+			});
+		} catch (err) {
+			return res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
+		}
+	}
+);
+
+router.put(
 	"/me",
 	customer_auth,
 	[
@@ -34,11 +68,6 @@ router.put(
 			.normalizeEmail()
 			.isEmail()
 			.withMessage("Email wrong format"),
-		body("password")
-			.isLength({
-				min: 8,
-			})
-			.withMessage("Password should be at least 8 chars"),
 		body("hobby").optional(),
 		body("job").optional(),
 		body("waist").optional().isInt({ min: 0 }),
