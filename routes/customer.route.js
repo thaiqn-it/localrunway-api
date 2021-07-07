@@ -126,7 +126,7 @@ router.put(
 				...data,
 			});
 			return res.json({
-				customer,
+				customer: excludePassword(customer),
 			});
 		} catch (err) {
 			return res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
