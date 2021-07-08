@@ -10,7 +10,7 @@ const { Product } = require("../models/product.model");
 const { Category } = require("../models/category.model");
 
 const indexingBulkSearch = async (id) => {
-	let product = await Product.findById(id);
+	let product = await Product.findById(id).populate("localbrand");
 	let arr = [];
 	arr.push(product.name);
 	arr.push(product.color);
