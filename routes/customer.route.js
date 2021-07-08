@@ -3,6 +3,7 @@ const { BAD_REQUEST, INTERNAL_SERVER_ERROR } = require("http-status");
 const { restError } = require("../errors/rest");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const { PUSH_NOTIFICATIONS } = require("../models/enum");
 const { hashPassword } = require("../utils");
 const { mapErrorArrayExpressValidator } = require("../utils");
 const { validationResult } = require("express-validator");
@@ -24,6 +25,44 @@ router.get("/me", customer_auth, async (req, res) => {
 		...excludePassword(customer._doc),
 	});
 });
+
+router.post(
+	"/setExpoPushToken",
+	[body("token").notEmpty().withMessage("Token should not be empty!")],
+	customer_auth,
+	async (req, res, next) => {
+		try {
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				return res.status(BAD_REQUEST).json(
+					restError.BAD_REQUEST.extra({
+						errorParams: mapErrorArrayExpressValidator(errors.array()),
+					})
+				);
+			}
+			const { token } = req.body;
+			let customer = req.customer;
+			customer = await customerService.updateOne(customer.id, {
+				expoPushToken: token,
+			});
+			await customerService.sendPushNotification(token, [
+				{
+					title: PUSH_NOTIFICATIONS.TITLE.TIPS,
+					body: PUSH_NOTIFICATIONS.BODY.SETTING_BODY_INDICES,
+				},
+				{
+					title: PUSH_NOTIFICATIONS.TITLE.EXPLORING,
+					body: PUSH_NOTIFICATIONS.BODY.EXPLORING_FEED,
+				},
+			]);
+			return res.json({
+				customer: excludePassword(customer),
+			});
+		} catch (err) {
+			return res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
+		}
+	}
+);
 
 router.put(
 	"/resetPassword",

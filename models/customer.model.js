@@ -64,6 +64,9 @@ const customerSchema = new mongoose.Schema({
 		type: String,
 		default: "",
 	},
+	expoPushToken: {
+		type: String,
+	},
 });
 
 const Customer = mongoose.model("Customer", customerSchema);

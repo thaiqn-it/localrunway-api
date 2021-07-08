@@ -54,3 +54,22 @@ exports.SIZE_SPECS = {
 	HIP_MAX: 200,
 	HIP_DELTA: 10,
 };
+
+exports.PUSH_NOTIFICATIONS = {
+	TITLE: {
+		TIPS: "LocalRunway - Tips 👕👖",
+		EXPLORING: "LocalRunway - What's new 👕👖",
+	},
+	BODY: {
+		SETTING_BODY_INDICES:
+			"📐 Setting up your body indices helps you find your product sizes that suit your body! Setting now 👉👉",
+		EXPLORING_FEED:
+			"🔎 Find out our best rating products 🌟, trending local brands 👑, and more. Discover now 👉👉",
+	},
+	DATA: {
+		ACTION: {
+			SETTING_BODY_INDICES: "SETTING_BODY_INDICES",
+			EXPLORING_FEED: "EXPLORING_FEED",
+		},
+	},
+};
