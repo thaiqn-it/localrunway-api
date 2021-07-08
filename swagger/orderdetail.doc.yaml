@@ -32,10 +32,50 @@ components:
           type: string
           description: The status of this OrderDetail
           enum: ["ACTIVE" , "INACTIVE" ]  
-        timestamps:
+        createAt:
           type: string
           format: date-time
           description: the date of this order is ordered
+        updateAt:
+          type: string
+          format: date-time
+          description: the lasted date of this order is udpated  
+  responses:
+    OrderDetailsGet:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: uuid
+          description: The auto generate id of OrderDetail
+        orderId:
+          type: string
+          format: uuid
+          description: The order id of this OrderDetail
+        productId:
+          type: string 
+          format: uuid
+          description: The id of the product
+        quantity:
+          type: number
+          description: the quantity of product in this detai 
+        unitPrice:
+          type: number
+          description: the price of the product
+        status:
+          type: string
+          description: The status of this OrderDetail
+          enum: ["ACTIVE" , "INACTIVE" ]  
+        createAt:
+          type: string
+          format: date-time
+          description: the date of this order is ordered
+        updateAt:
+          type: string
+          format: date-time
+          description: the lasted date of this order is udpated  
+        product:
+          $ref: '#/components/schemas/Product'        
 tags:
   name: OrderDetails
   description: The OrderDetails Management Apis          
@@ -89,14 +129,14 @@ tags:
         name: id
         schema:
           type: string
-        example: 60b09f8c7904b66b746cca2c
+        example: 60d0a2972066325cf0c2e5d9
         description: the id of the order
         required: true
       - in: path
         name: detailId
         schema:
           type: string
-        example: 60d20a6b7c861d25644e6ca9  
+        example: 60e5548966d6ac5a287e6d0b 
         description: the id of the orderdetail
         required: true  
     responses:
@@ -108,6 +148,6 @@ tags:
               type: object
               properties:
                 OrderDetails:
-                  $ref : '#/components/schemas/OrderDetails'
+                  $ref : '#/components/responses/OrderDetailsGet'
       500:
         description: Bad Request or Internal Server Error    

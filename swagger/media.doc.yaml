@@ -3,7 +3,7 @@ tags:
   description: The Media Management Apis
 /api/media/upload: 
   post:
-    summary: Upload image file
+    summary: Upload image file to server
     tags: [Media]
     requestBody:
       required: true
@@ -15,6 +15,7 @@ tags:
               file: 
                 type: string
                 format: binary
+                description: ""
     responses:
       200:
         description: delete succses

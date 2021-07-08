@@ -98,23 +98,26 @@ components:
       properties:
         _id:
           type: string
-          description: The auto generate id of Category
-        customerId:
-          type: string  
-          description: The customerid of the customer who order this
+          description: The auto generate id of Order
+        brandId:
+          type: string
+          description: The auto generate id of Localbrand
+        status:
+          type: string
+          description: The status of this Order
+          enum: ["RECEIVED" , "SHIPPING" , "COMPLETED" , "CANCELLED"]  
         address:
           type: string
           description: the address of this order
-        recipientName:
-          type: string
-          description: the name of the recipient  
         phoneNumber:
           type: string
           description: the phoneNumber of the customer order this
-        timestamps:
+        recipientName:
           type: string
-          format: date-time
-          description: the date of this order is ordered
+          description: the name of the recipient  
+        customerId:
+          type: string  
+          description: The customerid of the customer who order this  
         createAt:
           type: string
           format: date-time
@@ -125,12 +128,11 @@ components:
           description: the date of the lastest update of this order 
         localband:
           $ref: '#/components/schemas/Localbrand'
-        status:
-          type: string
-          description: The status of this Order
-          enum: ["RECEIVED" , "SHIPPING" , "COMPLETED" , "CANCELLED"]  
         payment:
           $ref: '#/definitions/Payment'       
+        total:
+          type: number
+          description: the total price of order  
 tags:
   name: Order
   description: The Order Management Apis
@@ -151,7 +153,7 @@ tags:
                 orders:
                   type: array
                   items:
-                    $ref : '#/components/schemas/Order'
+                    $ref : '#/components/responses/OrderData'
       500:
         description: Bad Request or Internal Server Error  
   post:
@@ -170,7 +172,7 @@ tags:
               type: object
               properties:
                 order:
-                  $ref : '#/components/schemas/Order'
+                  $ref : '#/components/responses/OrderData'
       500:
         description: Bad Request or Internal Server Error
 /api/orders/{id}:
@@ -184,7 +186,7 @@ tags:
         name: id
         schema: 
           type: string
-        example: 660d0a2972066325cf0c2e5d9   
+        example: 60e55403c2ba185e1444ac36  
         required: true
         description: the order's id
     responses:
@@ -209,7 +211,7 @@ tags:
         name: id
         schema: 
           type: string
-        example: 60d0a2972066325cf0c2e5d9    
+        example: 60e55403c2ba185e1444ac36    
         required: true
         description: the order's id
     requestBody:
