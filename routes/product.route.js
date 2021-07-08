@@ -210,7 +210,7 @@ router.put(
 		}
 		try {
 			let product = await productService.updateById(id, data);
-			product = await productService.indexingBulkSearch(product.id);
+			product = await productService.indexingBulkSearch(product._id);
 			return res.json({ product });
 		} catch (err) {
 			console.log(err);
