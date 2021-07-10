@@ -36,31 +36,7 @@ const customerSchema = new mongoose.Schema({
 		enum: Object.values(CUSTOMER_GENDER),
 		default: CUSTOMER_GENDER.OTHER,
 	},
-	height: {
-		type: Number,
-		default: 0,
-	},
-	weight: {
-		type: Number,
-		default: 0,
-	},
-	waist: {
-		type: Number,
-		default: 0,
-	},
-	hip: {
-		type: Number,
-		default: 0,
-	},
-	bust: {
-		type: Number,
-		default: 0,
-	},
 	fb_userId: {
-		type: String,
-		default: "",
-	},
-	firstBoughtBrands: {
 		type: String,
 		default: "",
 	},

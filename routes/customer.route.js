@@ -109,22 +109,11 @@ router.put(
 			.withMessage("Email wrong format"),
 		body("hobby").optional(),
 		body("job").optional(),
-		body("waist").optional().isInt({ min: 0 }),
-		body("hip").optional().isInt({ min: 0 }),
-		body("bust").optional().isInt({ min: 0 }),
 		body("name").notEmpty().withMessage("Name should not be empty"),
 		body("gender")
 			.optional()
 			.isIn(Object.values(CUSTOMER_GENDER))
 			.withMessage(`Gender must be within ${Object.values(CUSTOMER_GENDER)}`),
-		body("height")
-			.optional()
-			.isInt({ min: 0 })
-			.withMessage("Height should be a positive number"),
-		body("weight")
-			.optional()
-			.isInt({ min: 0 })
-			.withMessage("Weight should be a positive number"),
 	],
 	async (req, res, next) => {
 		try {
@@ -137,29 +126,13 @@ router.put(
 					})
 				);
 			}
-			const {
-				email,
-				hobby,
-				job,
-				bust,
-				waist,
-				hip,
-				name,
-				gender,
-				height,
-				weight,
-			} = req.body;
+			const { email, hobby, job, name, gender } = req.body;
 			const data = {
 				email,
 				hobby,
 				job,
-				bust,
-				waist,
-				hip,
 				name,
 				gender,
-				height,
-				weight,
 			};
 			const customer = await customerService.updateOne(customerId, {
 				...data,
@@ -262,9 +235,6 @@ router.post(
 			.withMessage("Password should be at least 8 chars"),
 		body("hobby").optional(),
 		body("job").optional(),
-		body("waist").optional().isInt({ min: 0 }),
-		body("hip").optional().isInt({ min: 0 }),
-		body("bust").optional().isInt({ min: 0 }),
 		body("name").notEmpty().withMessage("Name should not be empty"),
 		body("fb_userId").optional(),
 		body("status")
@@ -275,20 +245,6 @@ router.post(
 			.optional()
 			.isIn(Object.values(CUSTOMER_GENDER))
 			.withMessage(`Gender must be within ${Object.values(CUSTOMER_GENDER)}`),
-		body("height")
-			.optional()
-			.isInt({ min: 0 })
-			.withMessage("Height should be a positive number"),
-		body("weight")
-			.optional()
-			.isInt({ min: 0 })
-			.withMessage("Weight should be a positive number"),
-		body("firstBoughtBrandIds")
-			.optional()
-			.isArray()
-			.withMessage(
-				"Bought brands should be included as an array of brands ids"
-			),
 	],
 	async (req, res, next) => {
 		const errors = validationResult(req);
