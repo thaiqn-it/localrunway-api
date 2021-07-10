@@ -60,9 +60,13 @@ components:
         fb_userId:
           type: string
           description: The facebook userId of customer
+          example: "EAAYGlZANz2bABALjPuFvvHhlUNhLwrz0ihQrHQODCZA0dhTVR4jrtYtTIuXHSwNZAPEhgW4ZCYks8ZAAnEWV1NkpdJezYtLKx8NNxMsmkFGg0nyxlaZBnGx2NvtoNrq8DvuYWDjktFDUeqEgAZAqjbtK3U2UlsF7uE5RJhux1k5KQK7VRrBkfLQ4ZAgibEN3gOnZB4rHXnjM5PTqBSIW7UxOL0cpbOuOGQxt2VbmxA6mwZDZD"
         firstBoughtBrandIds:
           type: string
-          description: The First bought brand id of customer   
+          description: The First bought brand id of customer 
+        expoPushToken:
+          type: string
+          description: the token to push notification    
   response:
     customerProfile:
       type: object
@@ -239,7 +243,7 @@ tags:
                 type: string
             example:
               phoneNumber: "0123456791"
-              password: tinhbandieuky    
+              password: "tinhbandieuky"    
     responses:
       200:
         description: login succses and return the JWT auth token
@@ -264,8 +268,10 @@ tags:
           schema:
             type: object
             properties:
-              accessToken:
+              access_token:
                 type: string 
+            example: 
+              access_token: EAAE2ZCL5nszABAFaEwUvD8I2XVov07FiIZBSlIKqdpQIatUg3X4EMJLIrylD7bwCasXjF5DomToZCpr4HFhYKnYZAl8sSKmmmpg8yJ6kj3oVey6Ix2bgeqtDgSAAFxBjfv4Rj9vrtcDlhii8ciZCo0r13KS0ZBD8XZB6dEZCadZAInBq8R8WsUb5fkOb3P6i0PMUiaW4MqQYfoxW8eQVqPJsN9Ox28yQqs0GWub12cPLszucXZC5ludiaoJzQEiZCozIXsZD
     responses:
       200:
         description: login succses and return the JWT auth token
@@ -359,3 +365,83 @@ tags:
                 type: object
               errorParams:
                 type: object
+/api/customers/resetPassword:
+  put:
+    security:
+      - customerAuth: []
+    summary: "ResetPassword "
+    tags: [Customer]
+    requestBody:                
+      required: true
+      content:
+        application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                newPassword:
+                  type: string  
+    responses:
+      200:
+        description: Register succses and return the JWT auth token
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer:
+                    $ref: '#/components/response/customerProfile'
+      500:
+        description: bad request
+      400:
+        description: validation error
+        content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+              errorParams:
+                type: object
+/api/customers/setExpoPushToken:
+  post:
+    security:
+      - customerAuth: []
+    summary: "Set Token To Push Notification "
+    tags: [Customer]
+    requestBody:                
+      required: true
+      content:
+        application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: "ExponentPushToken[gcPOMoAq8sU6TMCQA4ah_i]"
+
+    responses:
+      200:
+        description: Notification is send to user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer:
+                    $ref: '#/components/response/customerProfile'
+      500:
+        description: bad request
+      400:
+        description: validation error
+        content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+              errorParams:
+                type: object                
