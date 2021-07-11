@@ -4,13 +4,8 @@ components:
       type: object
       required:
         - phoneNumber
-        - email
         - password
         - name
-        - status
-        - gender
-        - height
-        - weight
       properties:
         id:
           type: string
@@ -42,21 +37,6 @@ components:
           type: string
           enum: ["MALE", "FEMALE", "OTHER"]
           description: the gender of customer
-        height:
-          type: number
-          description: The customer's height
-        weight:
-          type: number
-          description: The customer's weight
-        waist:
-          type: number
-          description: The customer's waist number
-        hip:
-          type: number
-          description: The customer's waist number
-        bust:
-          type: number
-          description: The customer's bust number
         fb_userId:
           type: string
           description: The facebook userId of customer
@@ -86,18 +66,10 @@ components:
           type: string
         job:
           type: string
-        height:
-          type: number
-        weight:
-          type: number
-        bust: 
-          type: number
-        waist:
-          type: number
-        hip: 
-          type: number
         hobby:
-          type: string          
+          type: string
+        expoPushToken:
+          type: string            
 tags:
   name: Customer
   description: The Customer Management Apis
@@ -145,32 +117,17 @@ tags:
                 type: string
               job:
                 type: string
-              waist:
-                type: number
-              hip:  
-                type: number
-              bust:
-                type: number
               name: 
                 type: string
               gender:
-                type: string
-              height:
-                type: string
-              weight:
                 type: string
             example:
               email: sample@gmail.com
               password: tinhbandieuky
               hobby: football
               job: Student
-              waist: 90
-              bust: 90
-              hip: 90
               name: Dinh Phu Cuong
               gender: "MALE"
-              height: 170
-              weight: 60
     responses:
       200:
         description: the customer's infomation
@@ -211,21 +168,10 @@ tags:
                       type: string
                     hobby: 
                       type: string
-                    waist:
-                      type: string
-                    hip: 
-                      type: string
-                    bust: 
-                      type: string
                     name:
                       type: string
                     gender: 
                       type: string
-                    height:
-                      type: string
-                    weight:
-                      type: string                      
-     
 /api/customers/login:
   post:
     summary: "Login"
@@ -306,12 +252,6 @@ tags:
                 type: string
               job:
                 type: string
-              waist:
-                type: number
-              hip:  
-                type: number
-              bust:
-                type: number
               name: 
                 type: string
               fb_userId:
@@ -319,10 +259,6 @@ tags:
               status:
                 type: string  
               gender:
-                type: string
-              height:
-                type: string
-              weight:
                 type: string
               firstBoughtBrandIds:  
                 type: array    
@@ -332,15 +268,10 @@ tags:
               password: tinhbandieuky
               hobby: football
               job: Student
-              waist: 90
-              bust: 90
-              hip: 90
               name: Dinh Phu Cuong
               fb_userId: 
               status: "ACTIVE"
               gender: "MALE"
-              height: 170
-              weight: 60
               firstBoughtBrandIds: []     
     responses:
       200:
