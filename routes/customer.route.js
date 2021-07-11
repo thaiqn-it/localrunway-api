@@ -241,6 +241,7 @@ router.post(
 			.optional()
 			.isIn(Object.values(CUSTOMER_STATUS))
 			.withMessage(`Status must be within ${Object.values(CUSTOMER_STATUS)}`),
+		body("address").optional(),
 		body("gender")
 			.optional()
 			.isIn(Object.values(CUSTOMER_GENDER))
