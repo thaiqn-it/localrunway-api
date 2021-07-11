@@ -110,6 +110,7 @@ router.put(
 		body("hobby").optional(),
 		body("job").optional(),
 		body("name").notEmpty().withMessage("Name should not be empty"),
+		body("address").optional(),
 		body("gender")
 			.optional()
 			.isIn(Object.values(CUSTOMER_GENDER))
@@ -126,13 +127,14 @@ router.put(
 					})
 				);
 			}
-			const { email, hobby, job, name, gender } = req.body;
+			const { email, hobby, job, name, gender, address } = req.body;
 			const data = {
 				email,
 				hobby,
 				job,
 				name,
 				gender,
+				address,
 			};
 			const customer = await customerService.updateOne(customerId, {
 				...data,
