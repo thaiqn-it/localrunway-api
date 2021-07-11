@@ -127,15 +127,7 @@ router.put(
 					})
 				);
 			}
-			const { email, hobby, job, name, gender, address } = req.body;
-			const data = {
-				email,
-				hobby,
-				job,
-				name,
-				gender,
-				address,
-			};
+			const data = req.body;
 			const customer = await customerService.updateOne(customerId, {
 				...data,
 			});
