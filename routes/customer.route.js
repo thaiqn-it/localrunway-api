@@ -3,6 +3,7 @@ const { BAD_REQUEST, INTERNAL_SERVER_ERROR } = require("http-status");
 const { restError } = require("../errors/rest");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const { selectFields } = require("../utils");
 const { PUSH_NOTIFICATIONS } = require("../models/enum");
 const { hashPassword } = require("../utils");
 const { mapErrorArrayExpressValidator } = require("../utils");
@@ -200,7 +201,10 @@ router.put(
 					})
 				);
 			}
-			const data = req.body;
+			const data = selectFields(
+				req.body,
+				"email profileUrl hobby job name address gender"
+			);
 			const customer = await customerService.updateOne(customerId, {
 				...data,
 			});

@@ -30,6 +30,17 @@ exports.excludeFields = (obj, fields) => {
 	return copyObj;
 };
 
+exports.selectFields = (obj, fields = "") => {
+	const fieldArr = fields.split(" ");
+	const copyObj = {};
+	for (let p in obj) {
+		if (fieldArr.includes(p)) {
+			copyObj[p] = obj[p];
+		}
+	}
+	return copyObj;
+};
+
 exports.excludePassword = (obj, passwordField) => {
 	if (!passwordField) passwordField = "password";
 	obj.password = undefined;
