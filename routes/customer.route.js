@@ -27,6 +27,78 @@ router.get("/me", customer_auth, async (req, res) => {
 });
 
 router.post(
+	"/fbRegister",
+	[
+		body("access_token")
+			.notEmpty()
+			.withMessage("Facebook access token must be provided!"),
+		body("phoneNumber")
+			.notEmpty()
+			.bail()
+			.custom(validateVNPhoneNumber)
+			.bail()
+			.custom(async (phoneNumber) => {
+				if (
+					(await customerService.getOne({
+						phoneNumber,
+					})) !== null
+				) {
+					return Promise.reject("Phone Number have already existed");
+				}
+				return Promise.resolve();
+			}),
+	],
+	async (req, res, next) => {
+		try {
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				return res.status(BAD_REQUEST).json(
+					restError.BAD_REQUEST.extra({
+						errorParams: mapErrorArrayExpressValidator(errors.array()),
+					})
+				);
+			}
+
+			const { access_token, phoneNumber } = req.body;
+
+			let fbRes = await axios.get(
+				`https://graph.facebook.com/me?access_token=${access_token}&fields=id,name,email,picture`
+			);
+			const { id: fb_userId, name, email } = fbRes.data;
+			const profileUrl = fbRes.data.picture?.data?.url || "";
+			const password = hashPassword(
+				name.replace(/\s/g, "") + new Date().toISOString()
+			);
+			let customer = await customerService.getOne({
+				fb_userId,
+			});
+			if (customer) {
+				return res.status(BAD_REQUEST).json(
+					restError.BAD_REQUEST.extra({
+						errorParams: {
+							access_token: "Facebook account already exist!",
+						},
+					})
+				);
+			}
+			customer = await customerService.createOne({
+				fb_userId,
+				name,
+				email,
+				phoneNumber,
+				profileUrl,
+				password,
+			});
+			return res.json({
+				customer: excludePassword(customer),
+			});
+		} catch (err) {
+			return res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
+		}
+	}
+);
+
+router.post(
 	"/setExpoPushToken",
 	[body("token").notEmpty().withMessage("Token should not be empty!")],
 	customer_auth,
@@ -186,18 +258,6 @@ router.post("/fbLogin", async (req, res, next) => {
 		return res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
 	}
 });
-//
-// router.post("/fbRegister", async (req, res, next) => {
-// 	const { access_token } = req.body;
-// 	try {
-// 		const fbRes = await axios.get(
-// 			`https://graph.facebook.com/me?access_token=${access_token}&fields=id,name,`
-// 		);
-// 		const { id: fb_userId } = fbRes.data;
-// 	} catch (err) {
-// 		return res.status(BAD_REQUEST).json(restError.BAD_REQUEST.default());
-// 	}
-// });
 
 router.post(
 	"/register",
