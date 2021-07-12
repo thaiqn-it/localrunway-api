@@ -107,6 +107,7 @@ router.put(
 			.normalizeEmail()
 			.isEmail()
 			.withMessage("Email wrong format"),
+		body("profileUrl").optional(),
 		body("hobby").optional(),
 		body("job").optional(),
 		body("name").notEmpty().withMessage("Name should not be empty"),

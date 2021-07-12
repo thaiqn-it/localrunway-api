@@ -43,6 +43,10 @@ const customerSchema = new mongoose.Schema({
 	expoPushToken: {
 		type: String,
 	},
+	profileUrl: {
+		type: String,
+		default: "",
+	},
 });
 
 const Customer = mongoose.model("Customer", customerSchema);
