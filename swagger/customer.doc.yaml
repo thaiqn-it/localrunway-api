@@ -376,3 +376,41 @@ tags:
                 type: object
               errorParams:
                 type: object                
+/api/customers/fbRegister:
+  post:
+    summary: "Facebook register "
+    tags: [Customer]
+    requestBody:                
+      required: true
+      content:
+        application/json:
+            schema:
+              type: object
+              properties:
+                access_token:
+                  type: string
+                phoneNumber:
+                  type: string
+    responses:
+      200:
+        description: Register succses
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer:
+                    $ref: '#/components/response/customerProfile'
+      500:
+        description: bad request
+      400:
+        description: validation error
+        content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+              errorParams:
+                type: object                                   

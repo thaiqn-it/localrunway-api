@@ -3,7 +3,7 @@ components:
     Product:
       type: "object"
       properties:
-        id:
+        _id:
           type: "string"
           format: "uuid"
           description: The auto generate id of Localbrand
@@ -17,7 +17,7 @@ components:
             required: true
             format: uuid
             description: The Foreign key from Catgory
-        thumbanailUrl:
+        thumbnailUrl:
             type: string
             required: true
             description: the Url of thumbnail Image
@@ -54,30 +54,81 @@ components:
             description: the size of the product
         type:
             type: string
-            enum:  [GENERAL_PRODUCT , DETAIL_PRODUCT]
+            enum:  [GP , DP]
             description: the type of the product
             required: true
-        timestamps:
-            type: string
-            format: date-time
-            description: the time of this product create    
+        ratingTotal:
+          type: number
+          description: the total rating of product
+        ratingCount:
+          type: number
+          description: the count rating of product           
+        bulkSearch:
+          type: string
+          description:
+        sizeSpecs:
+          type: string
+          description:  
+        minWeight:
+          type: number
+        maxWeight:
+          type: number
+        minHeight:
+          type: number
+        maxHeight:
+          type: number 
+        minBust:
+          type: number
+        maxBust:
+          type: number
+        minWaist:
+          type: number
+        maxWaist:
+          type: number          
+        minHip:
+          type: number
+        maxHip:
+          type: number 
+        createAt:
+          type: string
+          format: date-time
+          description: the time of this product create
+        updateAt:
+          type: string
+          format: date-time
+          description: the lateset time of this product update datetime
       example: 
+        id: 60ec7107e135d96ef4775941
+        brandId: 60ca1b1dfe24b14ac8a92e99
+        categoryId: 60db5729e1dc165f4082e628
+        thumbanailUrl: https://firebasestorage.googleapis.com/v0/b/image-e6757.appspot.com/o/jacket-ontop-local-brand-viet-nam.2jpg-800x800.jpg?alt=media&token=4f02c71e-1c7a-45d0-abc9-c5885ebb055a
+        name: newProduct2
+        description: new Product 2021 Hot
         status: "ACTIVE"
-        _id: "60b09f8c7904b66b746cca2c"
-        brandId: "60ae5bbd1bca945ff4b5322d"
-        type: "GP"
-        description: "Áo thời trang mới nhất mùa hè 2021"
-        name: "Áo thun tay lỡ"
-        categoryId: "60ae5abe1bca945ff4b5321e"
-        price: 524000
-        color: "Black"
-        quantity: 173
-        hashtags: [
-            {
-                "_id": "60ae5a5c1bca945ff4b5320b",
-                "name": "docdao"
-            }
-        ]
+        price: 100000
+        color: pink
+        quantity: 1000
+        parentId: 60db5666e1dc165f4082e626
+        size: M
+        type: DP
+        ratingTotal: 0
+        ratingCount: 1
+        bulkSearch: "newProduct2 pink"
+        sizeSpecs: 
+        minWeight: 0
+        maxWeight: 200
+        minHeight: 0
+        maxHeight: 250
+        minBust: 0
+        maxBust: 200
+        minWaist: 0
+        maxWaist: 200
+        minHip: 0
+        maxHip: 200
+        createAt: 2021-07-12T16:42:47.869Z
+        updateAt: 2021-07-12T16:42:47.898Z
+        
+        
     
 
     ProductHashtag:
@@ -92,7 +143,22 @@ components:
         hashtagId: 
           type: "string"
           description: The id of hashtag
-      
+    ProductMedia:
+      type: object
+      properties:
+        id: 
+          type: "string"
+          description: The auto generate id of producthashtag
+        productId: 
+          type: "string"
+          description: The id of product
+        mediaUrl: 
+          type: "string"
+          description: The url of media
+        rank:
+          type: number
+          description: the rank of the product media  
+          
 paths:
   /api/products/{id}: 
     get: 
@@ -110,7 +176,9 @@ paths:
         - name: populates
           in: query
           type: array
-          description: query option  
+          description: query option 
+          example: ["category", "localbrand"] 
+          enum: ["category", "localbrand", "media" , "all"]
       responses:
         '200':
           description: get product
@@ -120,7 +188,7 @@ paths:
                 type: object
                 properties:
                   product:
-                    $ref: "#/components/schemas/Product"
+                    $ref: "#/definitions/GetProductRes"
         '404':
           description: product not found
     delete:
@@ -340,6 +408,8 @@ paths:
 
 
 definitions: # Schema definition for the request body
+  
+
   ConditionalProduct:
     type: object
     properties:
@@ -375,54 +445,199 @@ definitions: # Schema definition for the request body
         type: integer
         description: total pages left
   ProductReqBody:
-    description: A Json object contain product's OrderData
+    description: A Json object contain product's Data
     type: object
     properties:
       name:
         type: string
         required: true
         description: the name of the Product
+        example: newProduct
       description:
         type: string
         required: true
-        description: the description of the product        
+        description: the description of the product   
+        example: new Product 2021 Hot     
       status:
         type: string
         enum : ["ACTIVE", "INACTIVE"]
         description: the status of Localbrand
+        example: "ACTIVE"
       price:
         type: number
         description: The price of product
         required: true
+        example: 1000
       color:
         type: string
         description: The color of the product
         required: true
-      quantiy:
+        example: pink
+      quantity:
         type: number
         description: The quantity of product
         required: true
+        example: 1000
       parentId:
         type: string
         format: uuid
         description: the parents's product id of this product refer to
+        example: 60db5666e1dc165f4082e626
       size:
         type: string
         description: the size of the product
+        example: S
       type:
         type: string
         enum:  ["GP" , "DP"]
         description: the type of the product
         required: true
-      thumbanailUrl:
+        example: DP
+      thumbnailUrl:
+        required: true
         type: string
         description: the thumbanailUrl of the product
+        example: https://firebasestorage.googleapis.com/v0/b/image-e6757.appspot.com/o/jacket-ontop-local-brand-viet-nam.2jpg-800x800.jpg?alt=media&token=4f02c71e-1c7a-45d0-abc9-c5885ebb055a
       media:
+        required: true
         type: array
         items:
-          mediaURl:
-            type: string
+          type: object
+          properties:
+            rank: 
+              type: number
+            mediaUrl:
+              type: string
         description: the array contain the product's mediaUrl
-
-      
+        example:
+          - rank: 1
+            mediaUrl: https://firebasestorage.googleapis.com/v0/b/image-e6757.appspot.com/o/jacket-ontop-local-brand-viet-nam.2jpg-800x800.jpg?alt=media&token=4f02c71e-1c7a-45d0-abc9-c5885ebb055a      
+      brandId:
+        type: string
+        description: the Localbrand's Id
+        example: 60ca1b1dfe24b14ac8a92e99
+      categoryId:
+        type: string
+        description: the categoryId of product
+        example: 60db5729e1dc165f4082e628  
+  GetProductRes:
+    description: A Json object contain product's Data    
+    type: "object"
+    properties:
+        _id:
+          type: "string"
+          format: "uuid"
+          description: The auto generate id of Localbrand
+        brandId:
+          type: "string"
+          required: true
+          format: "uuid"
+          description: The Foreign key from Localbrand
+        categoryId:
+            type: string
+            required: true
+            format: uuid
+            description: The Foreign key from Catgory
+        thumbnailUrl:
+            type: string
+            required: true
+            description: the Url of thumbnail Image
+        name:
+            type: string
+            required: true
+            description: the name of the Product
+        description:
+            type: string
+            required: true
+            description: the description of the product        
+        status:
+            type: string
+            enum : ["ACTIVE", "INACTIVE"]
+            description: the status of Localbrand
+        price:
+            type: number
+            description: The price of product
+            required: true
+        color:
+            type: string
+            description: The color of the product
+            required: true
+        quantiy:
+            type: number
+            description: The quantity of product
+            required: true
+        parentId:
+            type: string
+            format: uuid
+            description: the parents's product id of this product refer to
+        size:
+            type: string
+            description: the size of the product
+        type:
+            type: string
+            enum:  [GP , DP]
+            description: the type of the product
+            required: true
+        ratingTotal:
+          type: number
+          description: the total rating of product
+        ratingCount:
+          type: number
+          description: the count rating of product           
+        bulkSearch:
+          type: string
+          description:
+        sizeSpecs:
+          type: string
+          description:  
+        minWeight:
+          type: number
+        maxWeight:
+          type: number
+        minHeight:
+          type: number
+        maxHeight:
+          type: number 
+        minBust:
+          type: number
+        maxBust:
+          type: number
+        minWaist:
+          type: number
+        maxWaist:
+          type: number          
+        minHip:
+          type: number
+        maxHip:
+          type: number 
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductMedia"
+        hashtags:
+          type: array
+          items:    
+            type: object
+            properties:
+              _id:
+                type: string
+              name:
+                type: string  
+        category:
+          type: object
+          properties:
+            _id:
+              type: string
+            name:
+              type: string 
+        localbrand:
+          $ref: "#/components/schemas/Localbrand"             
+        createAt:
+          type: string
+          format: date-time
+          description: the time of this product create
+        updateAt:
+          type: string
+          format: date-time
+          description: the lateset time of this product update datetime      
 
