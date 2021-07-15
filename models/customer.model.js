@@ -47,6 +47,10 @@ const customerSchema = new mongoose.Schema({
 		type: String,
 		default: "",
 	},
+	address: {
+		type: String,
+		default: "",
+	},
 });
 
 const Customer = mongoose.model("Customer", customerSchema);
