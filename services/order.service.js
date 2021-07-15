@@ -25,9 +25,15 @@ const getAllByCustomerId = async (customerId) => {
 	for (let order of orders) {
 		const brand = await localBrandService.getById(order.brandId);
 		const payment = await paymentService.getById(order.paymentId);
+		const details = await orderDetailService.getByOrderId(order.id);
+		let totalDetail = 0;
+		for (let detail of details) {
+			totalDetail += detail.quantity;
+		}
 		order._doc.localbrand = brand;
 		order._doc.payment = payment;
 		order._doc.total = await getTotalMoney(order.id);
+		order._doc.totalDetail = totalDetail;
 	}
 	return orders;
 };
