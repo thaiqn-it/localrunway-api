@@ -20,6 +20,9 @@ const option = {
 			{
 				url: "http://localhost:3000",
 			},
+			{
+				url: "https://secure-everglades-73390.herokuapp.com",
+			},
 		],
 	},
 	apis: ["./swagger/*.yaml"],
