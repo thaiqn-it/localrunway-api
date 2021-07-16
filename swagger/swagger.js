@@ -1,6 +1,7 @@
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const express = require("express");
+const { APP_PORT } = require("../constants");
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ const option = {
 		},
 		servers: [
 			{
-				url: "http://localhost:3000",
+				url: `http://localhost:${APP_PORT}`,
 			},
 			{
 				url: "https://secure-everglades-73390.herokuapp.com",
