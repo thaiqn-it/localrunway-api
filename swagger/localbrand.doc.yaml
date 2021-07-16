@@ -57,6 +57,37 @@ components:
          logoUrl: logo-all-about-him-local-brand-viet-nam-streetwear-585x372.jpg (585×372) (localbrand.vn)
          createdAt: '2021-06-16T15:39:09.912Z'
          updatedAt: '2021-06-16T15:39:09.912Z'
+  requestBodies:
+    LocalbrandInfoReq:
+      summary: localbrand infomation
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              address: 
+                type: string
+              description:
+                type: string
+              phoneNumber: 
+                type: string
+              username:
+                type: string
+              password:
+                type: string
+              logoUrl:
+                type: string
+            example:
+              name: 5TW
+              address: 68/8 Trần Quang Khải, Q3, TP. Hồ Chí Minh
+              phoneNumber: "0919555222"
+              description: Lorem Ipsum is simply dummy text
+              username:  testLocalbrand
+              password:  tinhbandieuki
+              logoUrl: http://bizweb.dktcdn.net/thumb/grande/100/348/395/articles/81322779-1021247811561111-2998201937876221952-o-removebg-preview.png?v=1592556156707
   response:
     LocalbrandExcludePassword:
       type: object
@@ -96,7 +127,7 @@ components:
       example:
          name: 5TW
          address: 68/8 Trần Quang Khải, Q3, TP. Hồ Chí Minh
-         phoneNumber: 0919555222
+         phoneNumber: "0919555222"
          description: Lorem Ipsum is simply dummy text
          username:  cuong
          status: ACTIVE
@@ -112,7 +143,7 @@ tags:
     tags: [Localbrand]
     responses:
      200:
-      description: The list of all hashtag
+      description: The list of all localbrand
       content:
         application/json:
           schema:
@@ -125,14 +156,10 @@ tags:
      404:
       description: Not found
   post:
-    summary: "insert new localbrand"
+    summary: "create new localbrand"
     tags: [Localbrand]
     requestBody:
-      required: true
-      content:
-        application/json:
-            schema:
-              $ref: '#/components/schemas/Localbrand'
+      $ref : '#/components/requestBodies/LocalbrandInfoReq'             
     responses:
      200:
       description: the inserted Localbrand
@@ -155,7 +182,7 @@ tags:
         schema:
           type: string
         required: true
-        description: The hashtag's id
+        description: The localbrand's id
     responses:
       200:
         description: the localbrand
@@ -179,11 +206,7 @@ tags:
         required: true
         description: The Localbrand id
     requestBody:
-       required: true
-       content:
-        application/json:
-           schema:
-             $ref: '#/components/response/LocalbrandExcludePassword'
+      $ref : '#/components/requestBodies/LocalbrandInfoReq'  
     responses:
       200:
         description: the updated Localbrand
@@ -260,9 +283,6 @@ tags:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              localbrand:
-                $ref: '#/components/response/LocalbrandExcludePassword'
+            $ref: '#/components/response/LocalbrandExcludePassword'
      500:
       description: bad request                

@@ -4,13 +4,8 @@ components:
       type: object
       required:
         - phoneNumber
-        - email
         - password
         - name
-        - status
-        - gender
-        - height
-        - weight
       properties:
         id:
           type: string
@@ -28,6 +23,9 @@ components:
         name:
           type: string
           description: The name of customer
+        address:
+          type: string
+          description: The defaul address of customer  
         status:
           type: string
           emum: ["ACTIVE", "INACTIVE"]
@@ -42,27 +40,16 @@ components:
           type: string
           enum: ["MALE", "FEMALE", "OTHER"]
           description: the gender of customer
-        height:
-          type: number
-          description: The customer's height
-        weight:
-          type: number
-          description: The customer's weight
-        waist:
-          type: number
-          description: The customer's waist number
-        hip:
-          type: number
-          description: The customer's waist number
-        bust:
-          type: number
-          description: The customer's bust number
         fb_userId:
           type: string
           description: The facebook userId of customer
+          example: "EAAYGlZANz2bABALjPuFvvHhlUNhLwrz0ihQrHQODCZA0dhTVR4jrtYtTIuXHSwNZAPEhgW4ZCYks8ZAAnEWV1NkpdJezYtLKx8NNxMsmkFGg0nyxlaZBnGx2NvtoNrq8DvuYWDjktFDUeqEgAZAqjbtK3U2UlsF7uE5RJhux1k5KQK7VRrBkfLQ4ZAgibEN3gOnZB4rHXnjM5PTqBSIW7UxOL0cpbOuOGQxt2VbmxA6mwZDZD"
         firstBoughtBrandIds:
           type: string
-          description: The First bought brand id of customer   
+          description: The First bought brand id of customer 
+        expoPushToken:
+          type: string
+          description: the token to push notification    
   response:
     customerProfile:
       type: object
@@ -82,18 +69,10 @@ components:
           type: string
         job:
           type: string
-        height:
-          type: number
-        weight:
-          type: number
-        bust: 
-          type: number
-        waist:
-          type: number
-        hip: 
-          type: number
         hobby:
-          type: string          
+          type: string
+        expoPushToken:
+          type: string            
 tags:
   name: Customer
   description: The Customer Management Apis
@@ -141,32 +120,20 @@ tags:
                 type: string
               job:
                 type: string
-              waist:
-                type: number
-              hip:  
-                type: number
-              bust:
-                type: number
               name: 
                 type: string
               gender:
                 type: string
-              height:
-                type: string
-              weight:
-                type: string
+              address:  
+                type: string  
             example:
               email: sample@gmail.com
               password: tinhbandieuky
               hobby: football
               job: Student
-              waist: 90
-              bust: 90
-              hip: 90
               name: Dinh Phu Cuong
               gender: "MALE"
-              height: 170
-              weight: 60
+              address: 333 Thong Nhat Street , Distric 9 , Ho Chi Minh City
     responses:
       200:
         description: the customer's infomation
@@ -207,21 +174,10 @@ tags:
                       type: string
                     hobby: 
                       type: string
-                    waist:
-                      type: string
-                    hip: 
-                      type: string
-                    bust: 
-                      type: string
                     name:
                       type: string
                     gender: 
                       type: string
-                    height:
-                      type: string
-                    weight:
-                      type: string                      
-     
 /api/customers/login:
   post:
     summary: "Login"
@@ -239,7 +195,7 @@ tags:
                 type: string
             example:
               phoneNumber: "0123456791"
-              password: tinhbandieuky    
+              password: "tinhbandieuky"    
     responses:
       200:
         description: login succses and return the JWT auth token
@@ -264,8 +220,10 @@ tags:
           schema:
             type: object
             properties:
-              accessToken:
+              access_token:
                 type: string 
+            example: 
+              access_token: EAAE2ZCL5nszABAFaEwUvD8I2XVov07FiIZBSlIKqdpQIatUg3X4EMJLIrylD7bwCasXjF5DomToZCpr4HFhYKnYZAl8sSKmmmpg8yJ6kj3oVey6Ix2bgeqtDgSAAFxBjfv4Rj9vrtcDlhii8ciZCo0r13KS0ZBD8XZB6dEZCadZAInBq8R8WsUb5fkOb3P6i0PMUiaW4MqQYfoxW8eQVqPJsN9Ox28yQqs0GWub12cPLszucXZC5ludiaoJzQEiZCozIXsZD
     responses:
       200:
         description: login succses and return the JWT auth token
@@ -300,12 +258,6 @@ tags:
                 type: string
               job:
                 type: string
-              waist:
-                type: number
-              hip:  
-                type: number
-              bust:
-                type: number
               name: 
                 type: string
               fb_userId:
@@ -314,28 +266,19 @@ tags:
                 type: string  
               gender:
                 type: string
-              height:
+              address: 
                 type: string
-              weight:
-                type: string
-              firstBoughtBrandIds:  
-                type: array    
             example:
               phoneNumber: "0937287333"
               email: sample@gmail.com
               password: tinhbandieuky
               hobby: football
               job: Student
-              waist: 90
-              bust: 90
-              hip: 90
               name: Dinh Phu Cuong
               fb_userId: 
               status: "ACTIVE"
               gender: "MALE"
-              height: 170
-              weight: 60
-              firstBoughtBrandIds: []     
+              address:   333 Thong Nhat Street , Distric 9 , Ho Chi Minh City
     responses:
       200:
         description: Register succses and return the JWT auth token
@@ -359,3 +302,121 @@ tags:
                 type: object
               errorParams:
                 type: object
+/api/customers/resetPassword:
+  put:
+    security:
+      - customerAuth: []
+    summary: "ResetPassword "
+    tags: [Customer]
+    requestBody:                
+      required: true
+      content:
+        application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                newPassword:
+                  type: string  
+    responses:
+      200:
+        description: Register succses and return the JWT auth token
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer:
+                    $ref: '#/components/response/customerProfile'
+      500:
+        description: bad request
+      400:
+        description: validation error
+        content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+              errorParams:
+                type: object
+/api/customers/setExpoPushToken:
+  post:
+    security:
+      - customerAuth: []
+    summary: "Set Token To Push Notification "
+    tags: [Customer]
+    requestBody:                
+      required: true
+      content:
+        application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: "ExponentPushToken[gcPOMoAq8sU6TMCQA4ah_i]"
+
+    responses:
+      200:
+        description: Notification is send to user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer:
+                    $ref: '#/components/response/customerProfile'
+      500:
+        description: bad request
+      400:
+        description: validation error
+        content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+              errorParams:
+                type: object                
+/api/customers/fbRegister:
+  post:
+    summary: "Facebook register "
+    tags: [Customer]
+    requestBody:                
+      required: true
+      content:
+        application/json:
+            schema:
+              type: object
+              properties:
+                access_token:
+                  type: string
+                phoneNumber:
+                  type: string
+    responses:
+      200:
+        description: Register succses
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer:
+                    $ref: '#/components/response/customerProfile'
+      500:
+        description: bad request
+      400:
+        description: validation error
+        content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+              errorParams:
+                type: object                                   
