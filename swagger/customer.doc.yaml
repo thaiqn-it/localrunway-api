@@ -23,6 +23,9 @@ components:
         name:
           type: string
           description: The name of customer
+        address:
+          type: string
+          description: The defaul address of customer  
         status:
           type: string
           emum: ["ACTIVE", "INACTIVE"]
@@ -121,6 +124,8 @@ tags:
                 type: string
               gender:
                 type: string
+              address:  
+                type: string  
             example:
               email: sample@gmail.com
               password: tinhbandieuky
@@ -128,6 +133,7 @@ tags:
               job: Student
               name: Dinh Phu Cuong
               gender: "MALE"
+              address: 333 Thong Nhat Street , Distric 9 , Ho Chi Minh City
     responses:
       200:
         description: the customer's infomation
@@ -260,8 +266,8 @@ tags:
                 type: string  
               gender:
                 type: string
-              firstBoughtBrandIds:  
-                type: array    
+              address: 
+                type: string
             example:
               phoneNumber: "0937287333"
               email: sample@gmail.com
@@ -272,7 +278,7 @@ tags:
               fb_userId: 
               status: "ACTIVE"
               gender: "MALE"
-              firstBoughtBrandIds: []     
+              address:   333 Thong Nhat Street , Distric 9 , Ho Chi Minh City
     responses:
       200:
         description: Register succses and return the JWT auth token
